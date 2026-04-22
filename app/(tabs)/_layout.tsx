@@ -1,35 +1,28 @@
-import { Tabs } from 'expo-router';
 import React from 'react';
+import { Tabs } from 'expo-router';
+import { TTab } from '@/components/bottomNavigation/Tab';
+import Navigation from '@/components/bottomNavigation/Navigation';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+const TABS: TTab[] = [
+  { name: 'index', route: 'index', icon: 'fist-outline', label: 'Fights' },
+  { name: 'ranks', route: 'ranks', icon: 'cup', label: 'Pros' },
+  { name: 'picks', route: 'picks', icon: 'coin', label: 'Feed' },
+  { name: 'groups', route: 'groups', icon: 'group', label: 'Fantasy' },
+  { name: 'profile', route: 'profile', icon: 'profile', label: 'Account' },
+];
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+        sceneStyle: { backgroundColor: 'transparent' },
+      }}
+      tabBar={(props) => <Navigation tabs={TABS} {...props} />}
+    >
+      {TABS.map((tab) => (
+        <Tabs.Screen key={tab.name} name={tab.name} options={{ title: tab.label }} />
+      ))}
     </Tabs>
   );
 }
