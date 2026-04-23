@@ -89,6 +89,7 @@ export const fonts = {
 } as const;
 
 export const fontSize = {
+  xxs: 10,
   xs: 12,
   sm: 14,
   base: 16,
@@ -96,9 +97,29 @@ export const fontSize = {
   xl: 20,
   '2xl': 24,
   '3xl': 96,
+  '4xl': 40,
+} as const;
+
+export const colors = {
+  whiteSolid: '#F5F5F5',
+  white85: 'rgba(245, 245, 245, 0.85)',
+  white60: 'rgba(245, 245, 245, 0.60)',
+  white30: 'rgba(245, 245, 245, 0.30)',
+  white20: 'rgba(245, 245, 245, 0.20)',
+  white7: 'rgba(245, 245, 245, 0.07)',
+  white3: 'rgba(245, 245, 245, 0.03)',
+  blackSolid: '#0D0D0D',
+  black85: 'rgba(13, 13, 13, 0.85)',
+  black30: 'rgba(13, 13, 13, 0.30)',
+  greenStart: '#CBFF00',
+  greenEnd: '#07F499',
+  green40Start: 'rgba(203, 255, 0, 0.4)',
+  green40End: 'rgba(7, 244, 153, 0.4)',
+  greenGlow: '#6DFB48',
 } as const;
 
 export const spacing = {
+  xxs: 6,
   xs: 4,
   sm: 8,
   md: 12,
@@ -107,6 +128,16 @@ export const spacing = {
   xl: 24,
   '2xl': 32,
   '3xl': 48,
+  '4xl': 64,
+} as const;
+
+export const gradients = {
+  authBg: {
+    colors: ['#060B11', '#070707', '#020202'] as const,
+    locations: [0.003, 0.68, 0.991] as const,
+    start: { x: 0.15, y: 0 } as const,
+    end: { x: 0.85, y: 1 } as const,
+  },
 } as const;
 
 export const borderRadius = {
