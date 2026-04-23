@@ -98,6 +98,7 @@ export const fontSize = {
   '2xl': 24,
   '3xl': 96,
   '4xl': 40,
+  '32pt': 32,
 } as const;
 
 export const colors = {

@@ -2,44 +2,39 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Stack } from 'expo-router';
-import { SvgProps } from 'react-native-svg';
+import { Stack, useRouter } from 'expo-router';
 import { GradientText } from '@/components/common';
 import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
 import GoogleIcon from '@/assets/icons/google.svg';
 import AppleIcon from '@/assets/icons/apple.svg';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
+import { BlackButton } from '@/components/common/BlackButton';
 
 const { width } = Dimensions.get('window');
 
 const GREEN_GRADIENT: [string, string] = [colors.greenStart, colors.greenEnd];
-const GREEN40_GRADIENT: [string, string] = [colors.green40Start, colors.green40End];
 const WATERMARK_COLORS: [string, string, string] = [colors.whiteSolid, colors.whiteSolid, colors.white3];
 const WATERMARK_LOCATIONS: [number, number, number] = [0, 0.316, 1];
 
-function SocialButton({ Icon, label, gap }: { Icon: React.FC<SvgProps>; label: string; gap: number }) {
-  return (
-    <TouchableOpacity activeOpacity={0.85}>
-      <LinearGradient
-        colors={GREEN40_GRADIENT}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.socialBorder}
-      >
-        <View style={[styles.socialInner, { gap }]}>
-          <View style={styles.socialIconWrapper}>
-            <Icon width={24} height={24} />
-          </View>
-          <GradientText style={styles.socialText} colors={GREEN40_GRADIENT}>
-            {label}
-          </GradientText>
-        </View>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-}
-
 export default function GetStarted() {
+  const router = useRouter();
+
+  const handleLogIn = () => {
+    router.push('./log-in');
+  };
+
+  const handleSignUpWithEmail = () => {
+    router.push('./sign-up');
+  };
+
+  const handleSignUpWithGoogle = () => {
+    console.log('Sign up with Google');
+  };
+
+  const handleSignUpWithApple = () => {
+    console.log('Sign up with Apple');
+  };
+  
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
@@ -67,9 +62,7 @@ export default function GetStarted() {
 
               <PrimaryButton 
                 label="Sign Up with Email / Phone"
-                onPress={() => {
-                  // обработчик нажатия
-                }}
+                onPress={handleSignUpWithEmail}
               />
 
               <View style={styles.divider}>
@@ -79,14 +72,14 @@ export default function GetStarted() {
               </View>
 
               <View style={styles.socialGroup}>
-                <SocialButton Icon={GoogleIcon} label="Sign Up with Google" gap={spacing.xs} />
-                <SocialButton Icon={AppleIcon} label="Sign Up with Apple" gap={spacing.xxs} />
+                <BlackButton Icon={GoogleIcon} label="Sign Up with Google" gap={spacing.xs} onPress={handleSignUpWithGoogle} />
+                <BlackButton Icon={AppleIcon} label="Sign Up with Apple" gap={spacing.xxs} onPress={handleSignUpWithApple} />
               </View>
             </View>
 
             <View style={styles.loginRow}>
               <Text style={styles.loginText}>Already a member?</Text>
-              <TouchableOpacity style={styles.loginBtn} activeOpacity={0.85}>
+              <TouchableOpacity style={styles.loginBtn} activeOpacity={0.85} onPress={handleLogIn}>
                 <GradientText style={styles.loginLink} colors={GREEN_GRADIENT}>
                   Log in
                 </GradientText>
