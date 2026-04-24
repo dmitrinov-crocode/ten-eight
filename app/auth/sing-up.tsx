@@ -32,7 +32,13 @@ export default function SignUp() {
     confirmPassword.trim().length > 0;
 
   const handleContinue = () => {
-    router.push('/auth/verification');
+    router.push({
+      pathname: '/auth/verification',
+      params: {
+        contact: firstField.trim(),
+        contactType: mode,
+      },
+    });
   };
 
   const handleModeSwitch = (newMode: SignUpMode) => {

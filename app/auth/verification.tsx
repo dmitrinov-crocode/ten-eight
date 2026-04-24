@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Stack, router } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
 import { BlackButton } from '@/components/common/BlackButton';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
@@ -20,9 +20,69 @@ import Back from '@/assets/icons/back.svg';
 
 const CODE_LENGTH = 4;
 
+const maskEmail = (email: string): string => {
+  const [localPart, domain] = email.split('@');
+  if (!domain) return email;
+  
+  const localLength = localPart.length;
+
+  if (localLength === 1) {
+    return `*@${domain}`;
+  }
+  
+  if (localLength === 2) {
+    return `${localPart[0]}*@${domain}`;
+  }
+  
+  if (localLength === 3) {
+    return `${localPart[0]}*${localPart[2]}@${domain}`;
+  }
+  
+  const firstTwo = localPart.slice(0, 2);
+  const lastTwo = localPart.slice(-2);
+  const starsCount = localLength - 4;
+  const stars = '*'.repeat(starsCount);
+  
+  return `${firstTwo}${stars}${lastTwo}@${domain}`;
+};
+
+const maskPhoneNumber = (phone: string): string => {
+  const digits = phone.replace(/\D/g, '');
+  
+  if (digits.length <= 3) {
+    return '*'.repeat(digits.length);
+  }
+  
+  const prefixLength = Math.min(3, Math.floor(digits.length / 2));
+  const suffixLength = Math.min(1, digits.length - prefixLength);
+  
+  const prefix = digits.slice(0, prefixLength);
+  const suffix = digits.slice(-suffixLength);
+  const starsCount = digits.length - prefixLength - suffixLength;
+  const stars = '*'.repeat(starsCount);
+
+  if (phone.startsWith('+')) {
+    return `+${prefix}${stars}${suffix}`;
+  }
+  
+  return `${prefix}${stars}${suffix}`;
+};
+
+const maskContact = (contact: string, type: 'email' | 'phone'): string => {
+  if (type === 'email') {
+    return maskEmail(contact);
+  }
+  return maskPhoneNumber(contact);
+};
+
 export default function Verification() {
+  const params = useLocalSearchParams<{ contact: string; contactType: 'email' | 'phone' }>();
   const [code, setCode] = useState<string[]>(Array(CODE_LENGTH).fill(''));
   const inputRefs = useRef<Array<TextInput | null>>(Array(CODE_LENGTH).fill(null));
+
+  const contact = params.contact || '';
+  const contactType = params.contactType || 'email';
+  const maskedContact = maskContact(contact, contactType);
 
   const isFilled = code.every((c) => c.length === 1);
 
@@ -83,7 +143,7 @@ export default function Verification() {
               <View style={styles.titleSection}>
                 <Text style={styles.title}>Verification</Text>
                 <Text style={styles.subtitle}>
-                  {'Please enter the code we sent to\nla****kk@gmail.com'}
+                  {`Please enter the code we sent to\n${maskedContact}`}
                 </Text>
               </View>
 
