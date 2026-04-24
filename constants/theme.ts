@@ -146,6 +146,7 @@ export const borderRadius = {
   button: 12,
   modal: 16,
   pill: 9999,
+  toggle: 30,
 } as const;
 
 export const animation = {

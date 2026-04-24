@@ -22,7 +22,12 @@ export default function GradientText({
 }: Props) {
   return (
     <MaskedView maskElement={<Text style={style}>{children}</Text>}>
-      <LinearGradient colors={colors} locations={locations} start={start} end={end}>
+      <LinearGradient
+        colors={colors as [string, string, ...string[]]}
+        locations={locations as [number, number, ...number[]] | undefined}
+        start={start}
+        end={end}
+      >
         <Text style={[style, { opacity: 0 }]}>{children}</Text>
       </LinearGradient>
     </MaskedView>

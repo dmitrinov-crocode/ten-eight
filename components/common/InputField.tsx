@@ -7,6 +7,8 @@ import {
   TextInputProps,
   TouchableOpacity,
 } from 'react-native';
+import Eye from '@/assets/icons/eye.svg';
+import CloseEye from '@/assets/icons/close_eye.svg';
 import { colors, fonts, fontSize, spacing, borderRadius } from '@/constants/theme';
 
 interface InputFieldProps extends TextInputProps {
@@ -22,42 +24,31 @@ export const InputField: React.FC<InputFieldProps> = ({
   secureTextEntry,
   ...rest
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const isSecure = secureTextEntry && !showPassword;
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && (
-        <Text style={[styles.label, isFocused && styles.labelFocused]}>
-          {label}
-        </Text>
-      )}
-      <View
-        style={[
-          styles.inputWrapper,
-          isFocused && styles.inputWrapperFocused,
-          error && styles.inputWrapperError,
-        ]}
-      >
+      {label && <Text style={styles.label}>{label}</Text>}
+      <View style={[styles.inputWrapper, error ? styles.inputWrapperError : undefined]}>
         <TextInput
           style={styles.input}
-          placeholderTextColor={colors.white30}
+          placeholderTextColor={colors.white20}
           selectionColor={colors.greenStart}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
           secureTextEntry={isSecure}
           {...rest}
         />
         {secureTextEntry && (
           <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
+            onPress={() => setShowPassword((prev) => !prev)}
             style={styles.eyeButton}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Text style={styles.eyeText}>
-              {showPassword ? '🙈' : '👁️'}
-            </Text>
+            {showPassword ? (
+              <Eye width={24} height={24} color={colors.white60} />
+            ) : (
+              <CloseEye width={24} height={24} color={colors.white60} />
+            )}
           </TouchableOpacity>
         )}
       </View>
@@ -69,52 +60,42 @@ export const InputField: React.FC<InputFieldProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    gap: spacing.xs,
+    gap: spacing.sm,
   },
   label: {
-    fontFamily: fonts.regular,
+    fontFamily: fonts.medium,
     fontSize: fontSize.sm,
-    color: colors.white60,
-    marginLeft: spacing.xs,
-  },
-  labelFocused: {
-    color: colors.greenStart,
+    color: colors.whiteSolid,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.white7,
-    borderRadius: borderRadius.pill,
-    borderWidth: 1,
-    borderColor: colors.white20,
-    paddingHorizontal: spacing.md,
-    height: 52,
-  },
-  inputWrapperFocused: {
-    borderColor: colors.greenStart,
-    backgroundColor: colors.white20,
+    borderRadius: borderRadius.card,
+    paddingLeft: spacing.md,
+    paddingRight: spacing.sm,
+    height: 44,
   },
   inputWrapperError: {
+    borderWidth: 1,
     borderColor: colors.greenEnd,
   },
   input: {
     flex: 1,
-    fontFamily: fonts.regular,
-    fontSize: fontSize.base,
-    color: colors.whiteSolid,
-    paddingVertical: spacing.sm,
+    fontFamily: fonts.medium,
+    fontSize: fontSize.sm,
+    color: colors.white85,
+    paddingVertical: 0,
   },
   eyeButton: {
-    padding: spacing.xs,
-  },
-  eyeText: {
-    fontSize: fontSize.lg,
-    opacity: 0.6,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   errorText: {
     fontFamily: fonts.regular,
     fontSize: fontSize.xs,
     color: colors.greenEnd,
-    marginLeft: spacing.xs,
   },
 });

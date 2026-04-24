@@ -8,6 +8,8 @@ import Group from '@/assets/icons/group.svg';
 import Search from '@/assets/icons/search.svg';
 import Settings from '@/assets/icons/settings.svg';
 import Profile from '@/assets/icons/profile.svg';
+import Eye from '@/assets/icons/eye.svg';
+import CloseEye from '@/assets/icons/close_eye.svg';
 import { StyleSheet, View } from 'react-native';
 
 const icons = {
@@ -21,6 +23,8 @@ const icons = {
   search: Search,
   settings: Settings,
   profile: Profile,
+  eye: Eye,
+  'close-eye': CloseEye,
 };
 
 export type IconName = keyof typeof icons;
