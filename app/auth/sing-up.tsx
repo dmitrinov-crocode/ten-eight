@@ -11,12 +11,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, router } from 'expo-router';
-import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
+import { colors, fonts, fontSize, spacing, gradients } from '@/constants/theme';
 import { InputField } from '@/components/common/InputField';
 import { BlackButton } from '@/components/common/BlackButton';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
-import { GradientText } from '@/components/common';
 import Back from '@/assets/icons/back.svg';
+import { LoginToggle } from '@/components/common/LoginToggle';
 
 type SignUpMode = 'email' | 'phone';
 
@@ -79,47 +79,7 @@ export default function SignUp() {
               </View>
 
               <View style={styles.formSection}>
-                <View style={styles.toggleContainer}>
-                  <TouchableOpacity
-                    style={[
-                      styles.toggleTab,
-                      mode === 'email' ? styles.toggleTabActive : styles.toggleTabInactive,
-                    ]}
-                    onPress={() => handleModeSwitch('email')}
-                    activeOpacity={0.7}
-                  >
-                    {mode === 'email' ? (
-                      <GradientText
-                        style={styles.toggleTextActive}
-                        colors={[colors.greenStart, colors.greenEnd]}
-                      >
-                        Email
-                      </GradientText>
-                    ) : (
-                      <Text style={styles.toggleTextInactive}>Email</Text>
-                    )}
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[
-                      styles.toggleTab,
-                      mode === 'phone' ? styles.toggleTabActive : styles.toggleTabInactive,
-                    ]}
-                    onPress={() => handleModeSwitch('phone')}
-                    activeOpacity={0.7}
-                  >
-                    {mode === 'phone' ? (
-                      <GradientText
-                        style={styles.toggleTextActive}
-                        colors={[colors.greenStart, colors.greenEnd]}
-                      >
-                        Phone Number
-                      </GradientText>
-                    ) : (
-                      <Text style={styles.toggleTextInactive}>Phone Number</Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
+                <LoginToggle mode={mode} onModeSwitch={handleModeSwitch} />
 
                 <View style={styles.inputsAndButton}>
                   <View style={styles.inputsContainer}>
@@ -224,41 +184,6 @@ const styles = StyleSheet.create({
   formSection: {
     alignItems: 'center',
     gap: spacing['2xl'],
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    backgroundColor: colors.white3,
-    borderWidth: 1,
-    borderColor: colors.white7,
-    borderRadius: borderRadius.toggle,
-    padding: spacing.sm,
-    gap: 2,
-    width: 343,
-  },
-  toggleTab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 42,
-  },
-  toggleTabActive: {
-    borderWidth: 1,
-    borderColor: colors.green40Start,
-    borderRadius: borderRadius.toggle,
-    paddingHorizontal: spacing.xxs,
-  },
-  toggleTabInactive: {
-    borderRadius: borderRadius.button,
-    paddingHorizontal: spacing.base,
-  },
-  toggleTextActive: {
-    fontFamily: fonts.medium,
-    fontSize: fontSize.sm,
-  },
-  toggleTextInactive: {
-    fontFamily: fonts.medium,
-    fontSize: fontSize.sm,
-    color: colors.white85,
   },
   inputsAndButton: {
     width: '100%',

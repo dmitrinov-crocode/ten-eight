@@ -26,85 +26,57 @@ export function BlackButton({
   activeOpacity = 0.85,
   style,
 }: BlackButtonProps) {
-  if (Icon) {
-    return (
-      <TouchableOpacity
-        activeOpacity={activeOpacity}
-        onPress={onPress}
-        disabled={disabled}
-        style={style}
-      >
-        <LinearGradient
-          colors={GREEN40_GRADIENT}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.socialBorder}
-        >
-          <View style={[styles.socialInner, { gap }]}>
-            <View style={styles.socialIconWrapper}>
-              <Icon width={24} height={24} />
-            </View>
-            <GradientText style={styles.socialText} colors={GREEN40_GRADIENT}>
-              {label}
-            </GradientText>
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    );
-  }
-
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
       onPress={onPress}
       disabled={disabled}
-      style={[styles.continueButton, style]}
+      style={style}
     >
-      <GradientText style={styles.continueText} colors={GREEN40_GRADIENT}>
-        {label}
-      </GradientText>
+      <LinearGradient
+        colors={GREEN40_GRADIENT}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.border}
+      >
+        <View style={[styles.inner, Icon ? { gap } : null]}>
+          {Icon && (
+            <View style={styles.iconWrapper}>
+              <Icon width={24} height={24} />
+            </View>
+          )}
+          <GradientText style={styles.text} colors={GREEN40_GRADIENT}>
+            {label}
+          </GradientText>
+        </View>
+      </LinearGradient>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  socialBorder: {
+  border: {
     borderRadius: borderRadius.pill,
     padding: 1,
   },
-  socialInner: {
+  inner: {
     backgroundColor: colors.blackSolid,
     borderRadius: borderRadius.pill,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: spacing.md,
-    paddingRight: spacing.base,
+    paddingHorizontal: spacing.base,
     paddingVertical: spacing.xxs,
+    height: 42,
   },
-  socialIconWrapper: {
+  iconWrapper: {
     width: 32,
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xs,
   },
-  socialText: {
-    fontFamily: fonts.medium,
-    fontSize: fontSize.sm,
-  },
-  continueButton: {
-    borderRadius: borderRadius.pill,
-    borderWidth: 1,
-    borderColor: colors.green40Start,
-    backgroundColor: colors.black30,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.base,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 44,
-  },
-  continueText: {
+  text: {
     fontFamily: fonts.medium,
     fontSize: fontSize.sm,
   },

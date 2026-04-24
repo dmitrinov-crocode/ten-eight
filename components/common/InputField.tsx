@@ -45,9 +45,9 @@ export const InputField: React.FC<InputFieldProps> = ({
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             {showPassword ? (
-              <Eye width={24} height={24} color={colors.white60} />
+              <Eye color={colors.white60} />
             ) : (
-              <CloseEye width={24} height={24} color={colors.white60} />
+              <CloseEye color={colors.white60} />
             )}
           </TouchableOpacity>
         )}
