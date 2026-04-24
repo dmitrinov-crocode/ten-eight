@@ -29,7 +29,8 @@ export default function SignUp() {
   const isFilled =
     firstField.trim().length > 0 &&
     password.trim().length > 0 &&
-    confirmPassword.trim().length > 0;
+    confirmPassword.trim().length > 0 &&
+    password === confirmPassword;
 
   const handleContinue = () => {
     router.push({
