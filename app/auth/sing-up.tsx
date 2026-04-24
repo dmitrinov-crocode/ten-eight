@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xs,
+    padding: spacing.xl,
   },
   content: {
     gap: spacing['2xl'],

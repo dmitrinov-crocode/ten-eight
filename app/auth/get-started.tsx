@@ -162,27 +162,6 @@ const styles = StyleSheet.create({
   buttonsInner: {
     gap: spacing.xl,
   },
-  primaryShadow: {
-    borderRadius: borderRadius.pill,
-    shadowColor: colors.greenGlow,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  primaryButton: {
-    borderRadius: borderRadius.pill,
-    paddingHorizontal: spacing.base,
-    paddingVertical: spacing.md,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  primaryText: {
-    fontFamily: fonts.medium,
-    fontSize: fontSize.sm,
-    color: colors.black85,
-  },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -191,7 +170,7 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.white30,
+    backgroundColor: colors.white20,
   },
   dividerText: {
     fontFamily: fonts.regular,

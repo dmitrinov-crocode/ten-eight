@@ -33,13 +33,13 @@ export function PrimaryButton({
       activeOpacity={activeOpacity} 
       onPress={onPress}
       disabled={disabled}
-      style={style}
+      style={[styles.buttonWrapper, styles.primaryShadow, style]}
     >
       <LinearGradient
         colors={gradientColors}
         start={start}
         end={end}
-        style={[styles.primaryButton, styles.primaryShadow]}
+        style={styles.primaryButton}
       >
         <Text style={[styles.primaryText, textStyle]}>
           {label}
@@ -50,6 +50,9 @@ export function PrimaryButton({
 }
 
 const styles = StyleSheet.create({
+  buttonWrapper: {
+    borderRadius: borderRadius.pill,
+  },
   primaryButton: {
     borderRadius: borderRadius.pill,
     paddingHorizontal: spacing.base,
@@ -64,7 +67,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 10,
-    overflow: 'visible',
   },
   primaryText: {
     fontFamily: fonts.medium,

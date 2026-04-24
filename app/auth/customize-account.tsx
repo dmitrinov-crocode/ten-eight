@@ -25,11 +25,25 @@ import User5 from '@/assets/icons/user5.svg';
 
 const USER_ICONS = [User1, User2, User3, User4, User5] as const;
 
+const formatBirthDate = (text: string): string => {
+  let cleaned = text.replace(/\D/g, '');
+  cleaned = cleaned.slice(0, 8);
+  let formatted = '';
+  for (let i = 0; i < cleaned.length; i++) {
+    if (i === 2 || i === 4) {
+      formatted += '/';
+    }
+    formatted += cleaned[i];
+  }
+  
+  return formatted;
+};
+
 export default function CustomizeAccount() {
   const [username, setUsername] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
 
-  const isFilled = username.trim().length > 0 && dateOfBirth.trim().length > 0;
+  const isFilled = username.trim().length > 0 && dateOfBirth.trim().length === 10;
 
   const RandomUserIcon = useMemo(
     () => USER_ICONS[Math.floor(Math.random() * USER_ICONS.length)],
@@ -38,6 +52,11 @@ export default function CustomizeAccount() {
 
   const handleContinue = () => {
     router.replace('/(tabs)');
+  };
+
+  const handleDateChange = (text: string) => {
+    const formatted = formatBirthDate(text);
+    setDateOfBirth(formatted);
   };
 
   return (
@@ -104,8 +123,9 @@ export default function CustomizeAccount() {
                       label="Date of Birth"
                       placeholder="mm/dd/yyyy"
                       value={dateOfBirth}
-                      onChangeText={setDateOfBirth}
+                      onChangeText={handleDateChange}
                       keyboardType="numeric"
+                      maxLength={10}
                     />
                   </View>
 
@@ -155,7 +175,7 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xs,
+    padding: spacing.xl,
   },
   content: {
     gap: spacing.xl,
