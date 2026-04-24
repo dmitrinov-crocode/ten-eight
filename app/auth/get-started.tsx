@@ -24,7 +24,7 @@ export default function GetStarted() {
   };
 
   const handleSignUpWithEmail = () => {
-    router.push('./sign-up');
+    router.push('./sing-up');
   };
 
   const handleSignUpWithGoogle = () => {

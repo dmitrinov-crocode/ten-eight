@@ -16,7 +16,7 @@ import { InputField } from '@/components/common/InputField';
 import { BlackButton } from '@/components/common/BlackButton';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { GradientText } from '@/components/common';
-import CommonIcon from '@/components/common/CommonIcon';
+import Back from '@/assets/icons/back.svg';
 
 type LoginMode = 'email' | 'phone';
 
@@ -63,7 +63,7 @@ export default function LogIn() {
           >
             <View style={styles.navBar}>
               <TouchableOpacity onPress={() => router.back()} style={styles.navButton}>
-                <CommonIcon name="arrow" size={24} color={colors.whiteSolid} />
+                <Back color={colors.whiteSolid} />
               </TouchableOpacity>
             </View>
 
@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xs,
-    transform:[{rotate:'-90deg'}],
   },
   content: {
     gap: spacing.xl,

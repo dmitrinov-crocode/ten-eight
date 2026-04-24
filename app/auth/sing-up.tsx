@@ -16,25 +16,30 @@ import { InputField } from '@/components/common/InputField';
 import { BlackButton } from '@/components/common/BlackButton';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { GradientText } from '@/components/common';
-import CommonIcon from '@/components/common/CommonIcon';
+import Back from '@/assets/icons/back.svg';
 
-type LoginMode = 'email' | 'phone';
+type SignUpMode = 'email' | 'phone';
 
-export default function LogIn() {
-  const [mode, setMode] = useState<LoginMode>('email');
+export default function SignUp() {
+  const [mode, setMode] = useState<SignUpMode>('email');
   const [firstField, setFirstField] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const isFilled = firstField.trim().length > 0 && password.trim().length > 0;
+  const isFilled =
+    firstField.trim().length > 0 &&
+    password.trim().length > 0 &&
+    confirmPassword.trim().length > 0;
 
   const handleContinue = () => {
-    router.replace('/(tabs)');
+    router.push('/auth/verification');
   };
 
-  const handleModeSwitch = (newMode: LoginMode) => {
+  const handleModeSwitch = (newMode: SignUpMode) => {
     setMode(newMode);
     setFirstField('');
     setPassword('');
+    setConfirmPassword('');
   };
 
   return (
@@ -63,16 +68,14 @@ export default function LogIn() {
           >
             <View style={styles.navBar}>
               <TouchableOpacity onPress={() => router.back()} style={styles.navButton}>
-                <CommonIcon name="arrow" size={24} color={colors.whiteSolid} />
+                <Back color={colors.whiteSolid} />
               </TouchableOpacity>
             </View>
 
             <View style={styles.content}>
               <View style={styles.titleSection}>
-                <Text style={styles.title}>Welcome Back!</Text>
-                <Text style={styles.subtitle}>
-                  Enter the email associated with your account
-                </Text>
+                <Text style={styles.title}>Create Account</Text>
+                <Text style={styles.subtitle}>Let&#39;s get you started in few steps!</Text>
               </View>
 
               <View style={styles.formSection}>
@@ -129,13 +132,22 @@ export default function LogIn() {
                       autoCapitalize="none"
                       autoComplete={mode === 'email' ? 'email' : 'tel'}
                     />
+                    <View style={styles.divider} />
                     <InputField
                       label="Password"
                       placeholder="Password"
                       value={password}
                       onChangeText={setPassword}
                       secureTextEntry
-                      autoComplete="password"
+                      autoComplete="password-new"
+                    />
+                    <InputField
+                      label="Confirm Password"
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      secureTextEntry
+                      autoComplete="password-new"
                     />
                   </View>
 
@@ -189,10 +201,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xs,
-    transform:[{rotate:'-90deg'}],
   },
   content: {
-    gap: spacing.xl,
+    gap: spacing['2xl'],
     marginTop: spacing.md,
   },
   titleSection: {
@@ -256,6 +267,10 @@ const styles = StyleSheet.create({
   },
   inputsContainer: {
     gap: spacing.xl,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: colors.white7,
   },
   continueButton: {
     width: '100%',
