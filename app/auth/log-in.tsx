@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   navBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.xxs,
     paddingVertical: spacing.xxs,
   },
   navButton: {

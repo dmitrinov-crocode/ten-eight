@@ -116,7 +116,7 @@ export const colors = {
   greenEnd: '#07F499',
   green40Start: 'rgba(203, 255, 0, 0.4)',
   green40End: 'rgba(7, 244, 153, 0.4)',
-  greenGlow: '#6DFB48',
+  greenGlow: '#6dfb48',
 } as const;
 
 export const spacing = {
