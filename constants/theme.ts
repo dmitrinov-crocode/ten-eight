@@ -120,6 +120,7 @@ export const colors = {
   green40Start: 'rgba(203, 255, 0, 0.4)',
   green40End: 'rgba(7, 244, 153, 0.4)',
   greenGlow: '#6dfb48',
+  white50: 'rgba(245, 245, 245, 0.50)',
 } as const;
 
 export const spacing = {
@@ -145,6 +146,7 @@ export const gradients = {
 } as const;
 
 export const borderRadius = {
+  xs: 6,
   card: 8,
   button: 12,
   modal: 16,
