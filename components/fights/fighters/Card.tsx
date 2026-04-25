@@ -3,8 +3,8 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { fonts, fontSize } from '@/constants/theme';
-import { CommonIcon } from '@/components/common';
-import CommonGradientText from '../../common/CommonGradientText';
+import { CommonIcon } from '@/components/auth';
+import CommonGradientText from '../../auth/CommonGradientText';
 import TeamsEntryModal from './TeamsEntryModal';
 
 type Fighter = {

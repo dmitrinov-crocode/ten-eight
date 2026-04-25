@@ -13,9 +13,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
-import { BlackButton } from '@/components/common/BlackButton';
-import { PrimaryButton } from '@/components/common/PrimaryButton';
-import { GradientText } from '@/components/common';
+import { BlackButton } from '@/components/auth/BlackButton';
+import { PrimaryButton } from '@/components/auth/PrimaryButton';
+import { GradientText } from '@/components/auth';
 import Back from '@/assets/icons/back.svg';
 
 const CODE_LENGTH = 4;

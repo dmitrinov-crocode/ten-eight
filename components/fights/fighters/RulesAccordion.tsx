@@ -3,8 +3,8 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { CommonIcon } from '@/components/common';
-import type { IconName } from '@/components/common/CommonIcon';
+import { CommonIcon } from '@/components/auth';
+import type { IconName } from '@/components/auth/CommonIcon';
 import { fonts, fontSize } from '@/constants/theme';
 
 export type RuleItem = {

@@ -9,6 +9,7 @@ import Search from '@/assets/icons/search.svg';
 import Settings from '@/assets/icons/settings.svg';
 import Profile from '@/assets/icons/profile.svg';
 import Eye from '@/assets/icons/eye.svg';
+import List from '@/assets/icons/list.svg';
 import CloseEye from '@/assets/icons/close_eye.svg';
 import { StyleSheet, View } from 'react-native';
 
@@ -24,6 +25,7 @@ const icons = {
   settings: Settings,
   profile: Profile,
   eye: Eye,
+  list: List,
   'close-eye': CloseEye,
 };
 

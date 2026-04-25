@@ -3,12 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useRouter } from 'expo-router';
-import { GradientText } from '@/components/common';
+import { GradientText } from '@/components/auth';
 import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
 import GoogleIcon from '@/assets/icons/google.svg';
 import AppleIcon from '@/assets/icons/apple.svg';
-import { PrimaryButton } from '@/components/common/PrimaryButton';
-import { BlackButton } from '@/components/common/BlackButton';
+import { PrimaryButton } from '@/components/auth/PrimaryButton';
+import { BlackButton } from '@/components/auth/BlackButton';
 
 const { width } = Dimensions.get('window');
 

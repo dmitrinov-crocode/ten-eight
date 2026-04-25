@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SvgProps } from 'react-native-svg';
-import { GradientText } from '@/components/common';
+import { GradientText } from '@/components/auth';
 import { colors, fonts, fontSize, spacing, borderRadius } from '@/constants/theme';
 
 const GREEN40_GRADIENT: [string, string] = [colors.green40Start, colors.green40End];

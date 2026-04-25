@@ -12,10 +12,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, router } from 'expo-router';
 import { colors, fonts, fontSize, spacing, gradients } from '@/constants/theme';
-import { InputField } from '@/components/common/InputField';
-import { BlackButton } from '@/components/common/BlackButton';
-import { PrimaryButton } from '@/components/common/PrimaryButton';
-import { LoginToggle, LoginMode } from '@/components/common/LoginToggle';
+import { InputField } from '@/components/auth/InputField';
+import { BlackButton } from '@/components/auth/BlackButton';
+import { PrimaryButton } from '@/components/auth/PrimaryButton';
+import { LoginToggle, LoginMode } from '@/components/auth/LoginToggle';
 import Back from '@/assets/icons/back.svg';
 
 export default function LogIn() {

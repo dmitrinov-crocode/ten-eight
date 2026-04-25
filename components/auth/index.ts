@@ -1,4 +1,4 @@
-import CommonIcon from '@/components/common/CommonIcon';
+import CommonIcon from '@/components/auth/CommonIcon';
 import CommonGradientText from './CommonGradientText';
 import GradientText from './GradientText';
 

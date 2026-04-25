@@ -12,11 +12,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, router } from 'expo-router';
 import { colors, fonts, fontSize, spacing, gradients } from '@/constants/theme';
-import { InputField } from '@/components/common/InputField';
-import { BlackButton } from '@/components/common/BlackButton';
-import { PrimaryButton } from '@/components/common/PrimaryButton';
+import { InputField } from '@/components/auth/InputField';
+import { BlackButton } from '@/components/auth/BlackButton';
+import { PrimaryButton } from '@/components/auth/PrimaryButton';
 import Back from '@/assets/icons/back.svg';
-import { LoginToggle } from '@/components/common/LoginToggle';
+import { LoginToggle } from '@/components/auth/LoginToggle';
 
 type SignUpMode = 'email' | 'phone';
 

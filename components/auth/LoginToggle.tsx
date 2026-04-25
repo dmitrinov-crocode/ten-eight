@@ -97,7 +97,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { GradientText } from '@/components/common';
+import { GradientText } from '@/components/auth';
 import { colors, fonts, fontSize, spacing, borderRadius } from '@/constants/theme';
 
 export type LoginMode = 'email' | 'phone';

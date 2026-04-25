@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import Svg, { Defs, Line, LinearGradient as SvgGradient, Path, Stop } from 'react-native-svg';
 
-import { CommonIcon } from '@/components/common';
+import { CommonIcon } from '@/components/auth';
 import { fonts, fontSize } from '@/constants/theme';
 import TeamsEntryModal from '@/components/fights/fighters/TeamsEntryModal'; // ─── Types ───────────────────────────────────────────────────────────────────
 

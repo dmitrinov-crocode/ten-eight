@@ -6,7 +6,7 @@ import Navigation from '@/components/bottomNavigation/Navigation';
 const TABS: TTab[] = [
   { name: 'index', route: 'index', icon: 'fist-outline', label: 'Fights' },
   { name: 'ranks', route: 'ranks', icon: 'cup', label: 'Pros' },
-  { name: 'picks', route: 'picks', icon: 'coin', label: 'Feed' },
+  { name: 'picks', route: 'picks', icon: 'list', label: 'Feed' },
   { name: 'groups', route: 'groups', icon: 'group', label: 'Fantasy' },
   { name: 'profile', route: 'profile', icon: 'profile', label: 'Account' },
 ];
