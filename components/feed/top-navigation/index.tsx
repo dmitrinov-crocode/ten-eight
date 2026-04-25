@@ -18,7 +18,7 @@ export default function TopNavigation() {
 
   const handleDropdownPress = useCallback(() => {
     dropdownButtonRef.current?.measure((_x, _y, _w, _h, pageX, pageY) => {
-      setAnchorPosition({ x: pageX, y: pageY + _h });
+      setAnchorPosition({ x: pageX, y: pageY });
       setDropdownVisible(true);
     });
   }, []);
