@@ -111,6 +111,8 @@ export const colors = {
   white3: 'rgba(245, 245, 245, 0.03)',
   blackSolid: '#0D0D0D',
   black85: 'rgba(13, 13, 13, 0.85)',
+  black40: 'rgba(13, 13, 13, 0.40)',
+  black35: 'rgba(13, 13, 13, 0.35)',
   black30: 'rgba(13, 13, 13, 0.30)',
   greenStart: '#CBFF00',
   greenEnd: '#07F499',
