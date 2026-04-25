@@ -1,5 +1,5 @@
-import CommonIcon from '@/components/auth/CommonIcon';
-import CommonGradientText from './CommonGradientText';
+import CommonIcon from '@/components/common/CommonIcon';
+import CommonGradientText from '../common/CommonGradientText';
 import GradientText from './GradientText';
 
 export { CommonIcon, CommonGradientText, GradientText };

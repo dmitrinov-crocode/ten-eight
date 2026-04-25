@@ -1,11 +1,13 @@
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Image, ImageSourcePropType, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
 import { colors, fonts, fontSize } from '@/constants/theme';
+import PlayIcon from '@/assets/icons/play.svg';
+import PlayWithSoundIcon from '@/assets/icons/play_with_sound.svg';
 
 export type PostCardItem = {
   id: string;
-  type: 'image' | 'video';
+  type: 'image' | 'video' | 'podcast';
   thumbnail: ImageSourcePropType;
   category: string;
   title: string;
@@ -14,30 +16,49 @@ export type PostCardItem = {
 };
 
 export default function PostCard({ item }: { item: PostCardItem }) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.thumbnail}>
-        <Image source={item.thumbnail} style={StyleSheet.absoluteFillObject} resizeMode="cover" />
-        {item.type === 'video' && (
-          <>
-            <View style={styles.videoOverlay} />
-            <Ionicons name="play-circle" size={28} color={colors.whiteSolid} />
-          </>
-        )}
-      </View>
+  const handlePress = () => {
+    //router.push(`../../feed/${item.id}`);
+    router.push(`../../feed/search`);
+  };
 
-      <View style={styles.info}>
-        <Text style={styles.category}>{item.category}</Text>
-        <Text style={styles.title} numberOfLines={3}>
-          {item.title}
-        </Text>
-        <View style={styles.meta}>
-          <Text style={styles.metaText}>{item.author}</Text>
-          <Text style={styles.dot}>⬤</Text>
-          <Text style={styles.metaText}>{item.timeAgo}</Text>
+  const renderPlayIcon = () => {
+    if (item.type === 'video') {
+      return <PlayIcon width={16} height={18} />;
+    }
+    if (item.type === 'podcast') {
+      return <PlayWithSoundIcon width={18} height={19} />;
+    }
+    return null;
+  };
+
+  const showOverlay = item.type === 'video' || item.type === 'podcast';
+
+  return (
+    <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
+      <View style={styles.container}>
+        <View style={styles.thumbnail}>
+          <Image source={item.thumbnail} style={StyleSheet.absoluteFillObject} resizeMode="cover" />
+          {showOverlay && (
+            <>
+              <View style={styles.videoOverlay} />
+              {renderPlayIcon()}
+            </>
+          )}
+        </View>
+
+        <View style={styles.info}>
+          <Text style={styles.category}>{item.category}</Text>
+          <Text style={styles.title} numberOfLines={2}>
+            {item.title}
+          </Text>
+          <View style={styles.meta}>
+            <Text style={styles.metaText}>{item.author}</Text>
+            <Text style={styles.dot}>⬤</Text>
+            <Text style={styles.metaText}>{item.timeAgo}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { fonts, fontSize } from '@/constants/theme';
 import { CommonIcon } from '@/components/auth';
-import CommonGradientText from '../../auth/CommonGradientText';
+import CommonGradientText from '../../common/CommonGradientText';
 import TeamsEntryModal from './TeamsEntryModal';
 
 type Fighter = {

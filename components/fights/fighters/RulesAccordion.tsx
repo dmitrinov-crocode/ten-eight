@@ -4,7 +4,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { CommonIcon } from '@/components/auth';
-import type { IconName } from '@/components/auth/CommonIcon';
+import type { IconName } from '@/components/common/CommonIcon';
 import { fonts, fontSize } from '@/constants/theme';
 
 export type RuleItem = {

@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react';
 import { ScreenContainer } from '@/components';
 import TopNavigation from '@/components/feed/top-navigation';
 import PostCard, { PostCardItem } from '@/components/feed/PostCard';
@@ -16,7 +17,7 @@ const MOCK_POSTS: PostCardItem[] = [
   },
   {
     id: '2',
-    type: 'video',
+    type: 'podcast',
     thumbnail: { uri: 'https://picsum.photos/seed/ufc2/254/170' },
     category: 'UFC',
     title: 'Fight By Fight Preview | UFC Winnipeg',
@@ -52,11 +53,36 @@ const MOCK_POSTS: PostCardItem[] = [
   },
 ];
 
+// Маппинг типов контента для фильтрации
+const getFilteredPosts = (posts: PostCardItem[], filterType: string) => {
+  switch (filterType) {
+    case 'Articles':
+      return posts.filter(post => post.type === 'image');
+    case 'Videos':
+      return posts.filter(post => post.type === 'video');
+    case 'Podcasts':
+      return posts.filter(post => post.type === 'podcast');
+    case 'All':
+    default:
+      return posts;
+  }
+};
+
 export default function PicksScreen() {
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  // Мемоизируем отфильтрованные посты для оптимизации
+  const filteredPosts = useMemo(() => {
+    return getFilteredPosts(MOCK_POSTS, activeFilter);
+  }, [activeFilter]);
+
   return (
     <ScreenContainer title="Feed" scrollable>
       <View style={styles.wrapper}>
-        <TopNavigation />
+        <TopNavigation 
+          activeFilter={activeFilter} 
+          onFilterChange={setActiveFilter} 
+        />
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recent Stories</Text>
@@ -64,7 +90,7 @@ export default function PicksScreen() {
 
         <View style={styles.cardsWrapper}>
           <View style={styles.cardsContainer}>
-            {MOCK_POSTS.map((post) => (
+            {filteredPosts.map((post) => (
               <PostCard key={post.id} item={post} />
             ))}
           </View>
@@ -79,7 +105,7 @@ const styles = StyleSheet.create({
     gap: spacing.base,
   },
   sectionHeader: {
-    paddingHorizontal: 6,
+    paddingHorizontal: 22,
   },
   sectionTitle: {
     fontFamily: fonts.medium,
