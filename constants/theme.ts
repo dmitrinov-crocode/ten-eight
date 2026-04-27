@@ -121,6 +121,11 @@ export const colors = {
   green40End: 'rgba(7, 244, 153, 0.4)',
   greenGlow: '#6dfb48',
   white50: 'rgba(245, 245, 245, 0.50)',
+  teal: '#2FC2AA',
+  red: '#C34363',
+  darkBlueBg: '#191C1F',
+  darkRedBg: '#1F1919',
+  selectedFighterBorder: 'rgba(122, 164, 111, 0.2)',
 } as const;
 
 export const spacing = {

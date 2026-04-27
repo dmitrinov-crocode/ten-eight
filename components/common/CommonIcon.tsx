@@ -11,6 +11,7 @@ import Profile from '@/assets/icons/profile.svg';
 import Eye from '@/assets/icons/eye.svg';
 import List from '@/assets/icons/list.svg';
 import CloseEye from '@/assets/icons/close_eye.svg';
+import User from '@/assets/icons/user1.svg';
 import { StyleSheet, View } from 'react-native';
 
 const icons = {
@@ -26,6 +27,7 @@ const icons = {
   profile: Profile,
   eye: Eye,
   list: List,
+  user: User,
   'close-eye': CloseEye,
 };
 

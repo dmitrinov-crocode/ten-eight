@@ -8,7 +8,7 @@ const TABS: TTab[] = [
   { name: 'ranks', route: 'ranks', icon: 'cup', label: 'Pros' },
   { name: 'picks', route: 'picks', icon: 'list', label: 'Feed' },
   { name: 'groups', route: 'groups', icon: 'group', label: 'Fantasy' },
-  { name: 'profile', route: 'profile', icon: 'profile', label: 'Account' },
+  { name: 'profile', route: 'profile', icon: 'user', label: 'Account' },
 ];
 
 export default function TabsLayout() {
