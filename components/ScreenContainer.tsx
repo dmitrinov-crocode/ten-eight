@@ -9,15 +9,16 @@ type TProps = {
   children: React.ReactNode;
   scrollable?: boolean;
   onSearchPress?: () => void;
+  onSettingsPress?: () => void;
 };
 
-export default function ScreenContainer({ title, children, scrollable = false, onSearchPress }: TProps) {
+export default function ScreenContainer({ title, children, scrollable = false, onSearchPress, onSettingsPress}: TProps) {
   const insets = useSafeAreaInsets();
   const Container = scrollable ? ScrollView : View;
 
   return (
     <View style={styles.container}>
-      <Header title={title} onSearchPress={onSearchPress} />
+      <Header title={title} onSearchPress={onSearchPress} onSettingsPress={onSettingsPress} />
       <Container
         style={styles.content}
         contentContainerStyle={
