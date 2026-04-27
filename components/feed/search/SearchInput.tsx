@@ -5,11 +5,11 @@ import { colors, fonts, fontSize, spacing, borderRadius } from '@/constants/them
 
 interface SearchInputProps {
   value: string;
-  onChangeText: (text: string) => void;
-  onClear: () => void;
+  onChangeText: (text: string) => void
+  onClose: () => void;
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({ value, onChangeText, onClear }) => {
+export const SearchInput: React.FC<SearchInputProps> = ({ value, onChangeText, onClose }) => {
   return (
     <View style={styles.navBar}>
       <View style={styles.inputField}>
@@ -24,12 +24,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({ value, onChangeText, o
         />
       </View>
       <TouchableOpacity
-        onPress={onClear}
+        onPress={onClose}
         style={styles.clearBtnOuter}
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
         <View style={styles.clearBtnInner}>
-          <CrossIcon width={24} height={24} color={colors.white60} />
+          <CrossIcon width={12} height={12} color={colors.white60} />
         </View>
       </TouchableOpacity>
     </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   clearBtnInner: {
-    padding: 4,
+    padding: 16,
     borderRadius: borderRadius.toggle,
     alignItems: 'center',
     justifyContent: 'center',

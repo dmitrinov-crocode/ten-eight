@@ -21,7 +21,7 @@ export default function CommentsPanel({ value, onChangeText, onSend }: Props) {
           <Text style={styles.headerTitle}>Comments</Text>
           <View style={styles.arrowFlipped}>
             <View style={styles.arrowContainer}>
-              <ArrowIcon width={24} height={24} color={colors.white60} />
+              <ArrowIcon color={colors.white60} />
             </View>
           </View>
         </View>

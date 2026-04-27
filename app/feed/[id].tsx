@@ -12,7 +12,7 @@ import { borderRadius, colors, fonts, fontSize, spacing } from '@/constants/them
 const MOCK_POST = {
   id: '1',
   type: 'image' as PostMediaType,
-  thumbnail: require('@/assets/backgrounds/main-bg.png'),
+  thumbnail: { uri: 'https://picsum.photos/seed/mma1/254/170' },
   authorName: 'Hamdy Abdelwah',
   body: `For the first time in more than eight years, UFC returns to the Winnipeg, Manitoba for a Fight Night event at Canada Life Centre this weekend, headlined by a fascinating welterweight matchup between former title challenger Gilbert Burns and ascending Canadian Mike Malott.\n\nNine Canadians are set to make the walk in their home country, including three newcomers, and the card is giving off a real "action is coming" vibe as the week begins, so rather than continue to wax poetic, let's dive into the matchups that are coming your way on Saturday night just down the block from the "Crossroads of Canada."`,
   likesCount: 2,
@@ -45,7 +45,7 @@ export default function FeedPostScreen() {
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 activeOpacity={0.7}
               >
-                <BackIcon width={24} height={24} />
+                <BackIcon />
               </TouchableOpacity>
 
               <View style={styles.authorGroup}>

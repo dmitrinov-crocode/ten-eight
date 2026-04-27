@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, spacing } from '@/constants/theme';
 import { SearchInput } from '@/components/feed/search/SearchInput';
@@ -34,13 +34,15 @@ const MOCK_RESULTS = [
 export default function SearchScreen() {
   const [search, setSearch] = useState('');
 
-  const handleClear = () => setSearch('');
+  const handleClose = () => {
+    router.back();
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.topSection}>
-        <SearchInput value={search} onChangeText={setSearch} onClear={handleClear} />
+        <SearchInput value={search} onChangeText={setSearch} onClose={handleClose} />
         <View style={styles.divider} />
       </View>
       {search.length > 0 && (
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   divider: {
     width: 343,
     height: 1,
-    backgroundColor: colors.white20,
+    backgroundColor: colors.white7,
   },
   resultsScroll: {
     flex: 1,

@@ -17,8 +17,7 @@ export type PostCardItem = {
 
 export default function PostCard({ item }: { item: PostCardItem }) {
   const handlePress = () => {
-    //router.push(`../../feed/${item.id}`);
-    router.push(`../../feed/search`);
+    router.push(`../../feed/${item.id}`);
   };
 
   const renderPlayIcon = () => {

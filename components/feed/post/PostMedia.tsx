@@ -12,10 +12,12 @@ type Props = {
 };
 
 export default function PostMedia({ type, source }: Props) {
+  const isVideoOrPodcast = type === 'video' || type === 'podcast';
+  
   return (
     <View style={styles.container}>
       <Image source={source} style={StyleSheet.absoluteFill} resizeMode="cover" />
-      <View style={styles.overlay} />
+      {isVideoOrPodcast && <View style={styles.overlay} />}
       {type === 'video' && (
         <View style={styles.playWrapper}>
           <PlayIcon width={24} height={24} />

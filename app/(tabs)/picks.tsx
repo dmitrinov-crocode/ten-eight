@@ -4,6 +4,7 @@ import TopNavigation from '@/components/feed/top-navigation';
 import PostCard, { PostCardItem } from '@/components/feed/PostCard';
 import { colors, fonts, fontSize, spacing } from '@/constants/theme';
 import { StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 
 const MOCK_POSTS: PostCardItem[] = [
   {
@@ -53,7 +54,6 @@ const MOCK_POSTS: PostCardItem[] = [
   },
 ];
 
-// Маппинг типов контента для фильтрации
 const getFilteredPosts = (posts: PostCardItem[], filterType: string) => {
   switch (filterType) {
     case 'Articles':
@@ -71,13 +71,16 @@ const getFilteredPosts = (posts: PostCardItem[], filterType: string) => {
 export default function PicksScreen() {
   const [activeFilter, setActiveFilter] = useState('All');
 
-  // Мемоизируем отфильтрованные посты для оптимизации
   const filteredPosts = useMemo(() => {
     return getFilteredPosts(MOCK_POSTS, activeFilter);
   }, [activeFilter]);
 
+  const onSearchPress = () => {
+        router.push(`../feed/search`);
+  };
+
   return (
-    <ScreenContainer title="Feed" scrollable>
+    <ScreenContainer title="Feed" scrollable onSearchPress={onSearchPress}>
       <View style={styles.wrapper}>
         <TopNavigation 
           activeFilter={activeFilter} 
