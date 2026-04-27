@@ -3,18 +3,22 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import Header from './Header';
 import { tabBarHeight } from '@/constants/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 type TProps = {
   title: string;
   children: React.ReactNode;
   scrollable?: boolean;
   onSearchPress?: () => void;
-  onSettingsPress?: () => void;
 };
 
-export default function ScreenContainer({ title, children, scrollable = false, onSearchPress, onSettingsPress}: TProps) {
+export default function ScreenContainer({ title, children, scrollable = false, onSearchPress}: TProps) {
   const insets = useSafeAreaInsets();
   const Container = scrollable ? ScrollView : View;
+
+  const onSettingsPress = () => {
+        router.push(`../settings/settings`);
+  };
 
   return (
     <View style={styles.container}>

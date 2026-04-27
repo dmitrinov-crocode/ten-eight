@@ -79,12 +79,8 @@ export default function PicksScreen() {
         router.push(`../feed/search`);
   };
 
-  const onSettingsPress = () => {
-        router.push(`../settings/settings`);
-  };
-
   return (
-    <ScreenContainer title="Feed" scrollable onSearchPress={onSearchPress} onSettingsPress={onSettingsPress}>
+    <ScreenContainer title="Feed" scrollable onSearchPress={onSearchPress}>
       <View style={styles.wrapper}>
         <TopNavigation 
           activeFilter={activeFilter} 
