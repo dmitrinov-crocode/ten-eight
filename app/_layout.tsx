@@ -12,6 +12,7 @@ import { ThemeProvider } from '@/providers/ThemeProvider';
 import { StyleSheet, View } from 'react-native';
 import { ImageBackground } from 'expo-image';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ThirdwebProvider } from 'thirdweb/react';
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -33,6 +34,7 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+    <ThirdwebProvider>
     <ThemeProvider>
       <View style={{ flex: 1, backgroundColor: 'black' }}>
         <ImageBackground
@@ -55,6 +57,7 @@ export default function RootLayout() {
         </ImageBackground>
       </View>
     </ThemeProvider>
+    </ThirdwebProvider>
     </GestureHandlerRootView>
   );
 }
