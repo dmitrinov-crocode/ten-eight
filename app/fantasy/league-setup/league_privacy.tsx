@@ -8,13 +8,12 @@ import { CardTypeOption } from '@/components/fantasy/league-setup/CardTypeOption
 import { CommonBlackButton } from '@/components/common/CommonBlackButton';
 import { CommonPrimaryButton } from '@/components/common/CommonPrimaryButton';
 import BackSvg from '@/assets/icons/back.svg';
-import Target from '@/assets/icons/target.svg';
-import Clock from '@/assets/icons/clock.svg';
-import Hash from '@/assets/icons/hash.svg';
+import Globe from '@/assets/icons/globe2.svg';
+import Lock from '@/assets/icons/lock.svg';
 
-type CardType = 'main' | 'full' | 'full2' | null;
+type CardType = 'main' | 'full' | null;
 
-export default function ScoringStyle() {
+export default function ChooseCardType() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<CardType>(null);
@@ -38,17 +37,16 @@ export default function ScoringStyle() {
           </View>
           <View style={styles.mainSection}>
             <View style={styles.titleSection}>
-              <Text style={styles.title}>Pick Cadence</Text>
+              <Text style={styles.title}>League Privacy</Text>
               <Text style={styles.subtitle}>
-                Decide how often your league will reset and score
+                Choose who can see and join your league. You can switch between public and private anytime
               </Text>
             </View>
             <View style={styles.cards}>
               <CardTypeOption
-                title="Money Line"
-                description="Pick the winner of each fight and earn points for correct outcomes"
-                tags={['Winner Pick', 'Simple Scoring']}
-                Icon={Target}
+                title="Main Card Only"
+                description="Only the featured fights on the main card will be included in scoring"
+                Icon={Globe}
                 showPopular
                 isSelected={selected === 'main'}
                 onPress={() => setSelected('main')}
@@ -56,18 +54,9 @@ export default function ScoringStyle() {
               <CardTypeOption
                 title="Full Card"
                 description="Every fight on the event card will count toward your league"
-                tags={['All Fights', 'Complete Scoring']}
-                Icon={Clock}
+                Icon={Lock}
                 isSelected={selected === 'full'}
                 onPress={() => setSelected('full')}
-              />
-              <CardTypeOption
-                title="Full Card2"
-                description="Every fight on the event card will count toward your league"
-                tags={['All Fights', 'Complete Scoring']}
-                Icon={Hash}
-                isSelected={selected === 'full2'}
-                onPress={() => setSelected('full2')}
               />
             </View>
           </View>
@@ -75,7 +64,7 @@ export default function ScoringStyle() {
             {selected ? (
               <CommonPrimaryButton
                 label="Continue"
-                onPress={() => router.push('/fantasy/league-setup/league_privacy')}
+                onPress={() => router.push('/fantasy/league-setup/scoring-style')}
                 style={styles.button}
               />
             ) : (

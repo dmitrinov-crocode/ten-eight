@@ -113,6 +113,7 @@ export const colors = {
   black85: 'rgba(13, 13, 13, 0.85)',
   black60: 'rgba(13, 13, 13, 0.60)',
   black40: 'rgba(13, 13, 13, 0.40)',
+  black50: 'rgba(13, 13, 13, 0.50)',
   black35: 'rgba(13, 13, 13, 0.35)',
   black30: 'rgba(13, 13, 13, 0.30)',
   greenStart: '#CBFF00',
@@ -129,6 +130,7 @@ export const colors = {
 } as const;
 
 export const spacing = {
+  nano: 2,
   xxs: 6,
   xs: 4,
   sm: 8,
@@ -147,6 +149,18 @@ export const gradients = {
     locations: [0.003, 0.68, 0.991] as const,
     start: { x: 0.15, y: 0 } as const,
     end: { x: 0.85, y: 1 } as const,
+  },
+  cardDefault: {
+    colors: ['rgba(0,189,231,0)', 'rgba(63,240,211,0.04)', 'rgba(182,254,13,0.12)'] as const,
+    locations: [0.14423, 0.64904, 1.0] as const,
+    start: { x: 0, y: 0 } as const,
+    end: { x: 0, y: 1 } as const,
+  },
+  cardSelected: {
+    colors: ['rgba(0,189,231,0)', 'rgba(63,240,211,0.15)', 'rgba(182,254,13,0.5)'] as const,
+    locations: [0.14423, 0.64904, 1.0] as const,
+    start: { x: 0, y: 0 } as const,
+    end: { x: 0, y: 1 } as const,
   },
 } as const;
 
