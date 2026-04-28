@@ -15,7 +15,7 @@ export default function ProfileHeader() {
       <View style={styles.info}>
         <Text style={styles.username}>Username</Text>
         <View style={styles.statsRow}>
-          <TouchableOpacity style={styles.statItem} onPress={() => router.push('/profile/folowers')}>
+          <TouchableOpacity style={styles.statItem} onPress={() => router.push('/profile/followers')}>
             <Text style={styles.statLabel}>FOLOWERS</Text>
             <Text style={styles.statValue}>54</Text>
           </TouchableOpacity>
