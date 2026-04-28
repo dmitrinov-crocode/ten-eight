@@ -32,7 +32,7 @@ export default function GroupScreen() {
             />
             <CommonPrimaryButton
               label="Find a League to Join"
-              onPress={() => router.push('/fantasy/all-leagues')}
+              onPress={() => router.push('/(tabs)/all-leagues')}
             />
           </View>
         </View>

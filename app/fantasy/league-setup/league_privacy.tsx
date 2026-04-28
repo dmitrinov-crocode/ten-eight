@@ -64,7 +64,7 @@ export default function ChooseCardType() {
             {selected ? (
               <CommonPrimaryButton
                 label="Continue"
-                onPress={() => router.push('/fantasy/league-setup/scoring-style')}
+                onPress={() => router.push('/fantasy/league-setup/set-up')}
                 style={styles.button}
               />
             ) : (
