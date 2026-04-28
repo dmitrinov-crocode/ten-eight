@@ -1,10 +1,10 @@
 import { Text } from 'react-native';
-import { ScreenContainer } from '@/components';
+import LeagueScreenContainer from '@/components/fantasy/league-main/ScreenContainer';
 
 export default function RanksScreen() {
   return (
-    <ScreenContainer title="Ranks" scrollable>
+    <LeagueScreenContainer title="NameOftheLeague" scrollable>
       <Text style={{ color: 'white' }}>Ranks</Text>
-    </ScreenContainer>
+    </LeagueScreenContainer>
   );
 }

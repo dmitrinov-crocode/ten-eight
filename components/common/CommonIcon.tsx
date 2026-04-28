@@ -12,6 +12,7 @@ import Eye from '@/assets/icons/eye.svg';
 import List from '@/assets/icons/list.svg';
 import CloseEye from '@/assets/icons/close_eye.svg';
 import User from '@/assets/icons/user1.svg';
+import Edit from '@/assets/icons/edit-contained.svg';
 import { StyleSheet, View } from 'react-native';
 
 const icons = {
@@ -28,6 +29,7 @@ const icons = {
   eye: Eye,
   list: List,
   user: User,
+  edit: Edit,
   'close-eye': CloseEye,
 };
 

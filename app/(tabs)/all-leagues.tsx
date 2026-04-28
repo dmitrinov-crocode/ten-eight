@@ -63,9 +63,13 @@ export default function AllLeaguesScreen() {
     showToast();
   };
 
+  const onSearchPress = () => {
+          router.push(`../feed/search`);
+  };
+
   return (
     <View style={styles.screenWrapper}>
-      <ScreenContainer title="Leagues" scrollable>
+      <ScreenContainer title="Leagues" scrollable onSearchPress={onSearchPress}>
         <View style={styles.container}>
           <View style={styles.alreadyJoinedSection}>
             <View style={styles.alreadyJoinedCard}>
