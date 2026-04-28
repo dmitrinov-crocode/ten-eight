@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts, fontSize, spacing } from '@/constants/theme';
 import { CommonPrimaryButton } from '@/components/common/CommonPrimaryButton';
 
-export default function GroupScreen() {
+export default function FantasyScreen() {
   const insets = useSafeAreaInsets();
 
   return (
