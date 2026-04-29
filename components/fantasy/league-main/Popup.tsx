@@ -1,41 +1,22 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  Pressable,
-} from 'react-native';
-import League from '@/assets/icons/league.svg';
-import Global from '@/assets/icons/globe.svg';
-import Lock from '@/assets/icons/lock2.svg';
+import { View, Text, StyleSheet, Modal, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors, fonts, fontSize, spacing, borderRadius } from '@/constants/theme';
+import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
+import GlobeIcon from '@/assets/icons/globe.svg';
+import LockIcon from '@/assets/icons/lock3.svg';
 
-export type LeagueData = {
-  id: string;
-  name: string;
-  members: number;
-  isPrivate?: boolean;
-};
+export type PopupMode = 'toPublic' | 'toPrivate';
 
-type LeaguePopupProps = {
-  league: LeagueData | null;
+type Props = {
   visible: boolean;
+  mode: PopupMode;
   onClose: () => void;
-  isPrivate?: boolean;
-  onJoin?: () => void;
-  onRequestAccess?: () => void;
+  onConfirm: () => void;
 };
 
-export default function Popup({
-  league,
-  visible,
-  onClose,
-  isPrivate,
-  onJoin,
-  onRequestAccess,
-}: LeaguePopupProps) {
+export default function Popup({ visible, mode, onClose, onConfirm }: Props) {
+  const isToPublic = mode === 'toPublic';
+
   return (
     <Modal
       visible={visible}
@@ -43,79 +24,43 @@ export default function Popup({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.modalOverlay} onPress={onClose}>
-        <Pressable style={styles.popupSheet} onPress={() => {}}>
-          <View style={styles.popupHandleContainer}>
-            <View style={styles.popupHandle} />
+      <Pressable style={styles.overlay} onPress={onClose}>
+        <Pressable style={styles.sheet} onPress={() => {}}>
+          <View style={styles.handleRow}>
+            <View style={styles.handle} />
           </View>
-          <View style={styles.popupContent}>
-            <View style={styles.popupTopSection}>
-              <View style={styles.popupHeader}>
-                <View style={styles.leagueIconWrapper}>
-                  <League width={36} height={36} />
-                </View>
-                <Text style={styles.popupTitle}>{league?.name ?? ''}</Text>
+          <View style={styles.content}>
+            <View style={styles.infoRow}>
+              <View style={styles.iconWrapper}>
+                {isToPublic ? (
+                  <GlobeIcon width={24} height={24} color={colors.white60} />
+                ) : (
+                  <LockIcon width={24} height={24} color={colors.white60} />
+                )}
               </View>
-              <View style={styles.popupTagsSection}>
-                <View style={styles.popupTagsRow}>
-                  <View style={styles.popupTag}>
-                    <Text style={styles.popupTagText}>Main Card</Text>
-                  </View>
-                  <View style={styles.popupTag}>
-                    <Text style={styles.popupTagText}>Money Line</Text>
-                  </View>
-                  <View style={styles.popupTag}>
-                    <Text style={styles.popupTagText}>One Card</Text>
-                  </View>
-                </View>
-                <View style={styles.popupDescription}>
-                  <Text style={styles.popupDescriptionText}>
-                    {isPrivate
-                      ? 'This is a private League'
-                      : 'Welcome to Our League!\n\nNo rules here\n\nHave fun!'}
-                  </Text>
-                </View>
+              <View style={styles.textBlock}>
+                <Text style={styles.title}>
+                  {isToPublic ? 'Open Your League to Everyone?' : 'Switch to Private Mode?'}
+                </Text>
+                <Text style={styles.subtitle}>
+                  {isToPublic
+                    ? 'Making your league public will allow anyone to discover it and join based on your settings'
+                    : 'Your league will no longer be open to everyone, and only approved members will be able to join'}
+                </Text>
               </View>
             </View>
-            <View style={styles.popupDivider} />
-            <View style={styles.popupFooter}>
-              <View style={styles.popupInfoRow}>
-                <View style={styles.popupInfoLeft}>
-                  <View style={styles.popupGlobeContainer}>
-                    {isPrivate ? (
-                      <Lock width={24} height={24} />
-                    ) : (
-                      <Global width={24} height={24} />
-                    )}
-                  </View>
-                  <View style={styles.popupInfoText}>
-                    <Text style={styles.popupInfoTitle}>
-                      {isPrivate ? 'Private League' : 'Public League'}
-                    </Text>
-                    <Text style={styles.popupInfoSubtitle}>
-                      {league?.members ?? 0} Members
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.popupTimeLeft}>
-                  <Text style={styles.popupTimeLeftText}>
-                    {isPrivate ? 'Time Left: 23:01' : 'Time Left: 6d'}
-                  </Text>
-                </View>
-              </View>
-              <Pressable onPress={isPrivate ? onRequestAccess : onJoin}>
-                <LinearGradient
-                  colors={[colors.greenStart, colors.greenEnd]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.popupJoinButton}
-                >
-                  <Text style={styles.popupJoinButtonText}>
-                    {isPrivate ? 'Request Access' : 'Join'}
-                  </Text>
-                </LinearGradient>
-              </Pressable>
-            </View>
+            <Pressable onPress={onConfirm}>
+              <LinearGradient
+                colors={[colors.greenStart, colors.greenEnd]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.btn}
+              >
+                <Text style={styles.btnText}>
+                  {isToPublic ? 'Change to Public' : 'Change to Private'}
+                </Text>
+              </LinearGradient>
+            </Pressable>
           </View>
         </Pressable>
       </Pressable>
@@ -124,142 +69,67 @@ export default function Popup({
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
+  overlay: {
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  popupSheet: {
+  sheet: {
     backgroundColor: colors.black85,
     borderTopLeftRadius: borderRadius.toggle,
     borderTopRightRadius: borderRadius.toggle,
-    paddingHorizontal: spacing.base,
-    paddingBottom: spacing['2xl'],
-    paddingTop: spacing.base,
+    padding: spacing.base,
+    gap: spacing.md,
     shadowColor: colors.blackSolid,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 2,
     elevation: 4,
   },
-  popupHandleContainer: {
+  handleRow: {
     alignItems: 'center',
     paddingBottom: spacing.md,
   },
-  popupHandle: {
+  handle: {
     width: 80,
     height: 4,
     borderRadius: borderRadius.pill,
     backgroundColor: colors.white20,
   },
-  popupContent: {
+  content: {
     paddingHorizontal: spacing.sm,
     gap: spacing.base,
   },
-  popupTopSection: {
-    gap: spacing.base,
-  },
-  popupHeader: {
+  infoRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
+    alignItems: 'flex-start',
+    gap: 10,
+    paddingVertical: spacing.sm,
   },
-  leagueIconWrapper: {
-    width: 36,
-    height: 36,
-    borderRadius: borderRadius.toggle,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  popupTitle: {
-    fontFamily: fonts.semibold,
-    fontSize: fontSize.lg,
-    color: colors.white85,
-    flex: 1,
-  },
-  popupTagsSection: {
-    gap: spacing.md,
-  },
-  popupTagsRow: {
-    flexDirection: 'row',
-    gap: spacing.xxs,
-  },
-  popupTag: {
-    backgroundColor: colors.white3,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xxs,
-    borderRadius: borderRadius.xs,
-  },
-  popupTagText: {
-    fontFamily: fonts.regular,
-    fontSize: fontSize.xs,
-    color: colors.white50,
-  },
-  popupDescription: {
-    backgroundColor: colors.white7,
-    borderRadius: borderRadius.card,
-    paddingLeft: spacing.md,
-    paddingRight: spacing.sm,
-    paddingVertical: spacing.md,
-  },
-  popupDescriptionText: {
-    fontFamily: fonts.regular,
-    fontSize: fontSize.sm,
-    color: colors.white60,
-  },
-  popupDivider: {
-    height: 1,
-    backgroundColor: colors.white7,
-  },
-  popupFooter: {
-    gap: spacing.md,
-  },
-  popupInfoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: spacing.md,
-  },
-  popupInfoLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  popupGlobeContainer: {
+  iconWrapper: {
     width: 32,
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xs,
+    flexShrink: 0,
   },
-  popupInfoText: {
+  textBlock: {
+    flex: 1,
     gap: 2,
   },
-  popupInfoTitle: {
-    fontFamily: fonts.medium,
-    fontSize: fontSize.sm,
+  title: {
+    fontFamily: fonts.semibold,
+    fontSize: fontSize.lg,
     color: colors.white85,
   },
-  popupInfoSubtitle: {
+  subtitle: {
     fontFamily: fonts.regular,
     fontSize: fontSize.xs,
-    color: colors.white30,
+    color: colors.white60,
   },
-  popupTimeLeft: {
-    backgroundColor: colors.white3,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xxs,
-    borderRadius: borderRadius.xs,
-  },
-  popupTimeLeftText: {
-    fontFamily: fonts.regular,
-    fontSize: fontSize.xs,
-    color: colors.white50,
-  },
-  popupJoinButton: {
-    borderRadius: borderRadius.toggle,
+  btn: {
+    borderRadius: borderRadius.pill,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.base,
     alignItems: 'center',
@@ -270,7 +140,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 10,
   },
-  popupJoinButtonText: {
+  btnText: {
     fontFamily: fonts.medium,
     fontSize: fontSize.sm,
     color: colors.black85,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,12 +9,33 @@ import SectionSelector, { LeagueTab } from '@/components/fantasy/league-main/Sec
 import HomeSection from '@/components/fantasy/league-main/HomeSection';
 import LeaderboardSection from '@/components/fantasy/league-main/LeaderboardSection';
 import FightsSection from '@/components/fantasy/league-main/FightsSection';
-import Popup from '@/components/fantasy/league-main/Popup';
+import Toast from '@/components/fantasy/league-main/Toast';
+
+const TOAST_DURATION = 2500;
 
 export default function LeagueScreen() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<LeagueTab>('Home');
-  const [popupVisible, setPopupVisible] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = useCallback((message: string) => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToastMessage(message);
+    setToastVisible(true);
+    toastTimer.current = setTimeout(() => setToastVisible(false), TOAST_DURATION);
+  }, []);
+
+  const handleCopySuccess = useCallback(() => {
+    showToast('Link has been copied');
+  }, [showToast]);
+
+  const handleExtendPress = useCallback(() => {
+    showToast('Time limit increased');
+  }, [showToast]);
+
+  const toastTopOffset = insets.top + spacing.sm + 44 + spacing.sm;
 
   return (
     <LinearGradient
@@ -41,17 +62,19 @@ export default function LeagueScreen() {
         <View style={styles.inner}>
           <SectionSelector activeTab={activeTab} onTabPress={setActiveTab} />
           {activeTab === 'Home' && (
-            <HomeSection onPublicPrivatePress={() => setPopupVisible(true)} />
+            <HomeSection
+              onCopySuccess={handleCopySuccess}
+              onExtendPress={handleExtendPress}
+            />
           )}
           {activeTab === 'Leaderboard' && <LeaderboardSection />}
           {activeTab === 'Fights' && <FightsSection />}
         </View>
       </ScrollView>
-      <Popup
-        league={{ id: '1', name: 'NameOftheLeague', members: 24 }}
-        visible={popupVisible}
-        onClose={() => setPopupVisible(false)}
-        onJoin={() => setPopupVisible(false)}
+      <Toast
+        visible={toastVisible}
+        message={toastMessage}
+        topOffset={toastTopOffset}
       />
     </LinearGradient>
   );

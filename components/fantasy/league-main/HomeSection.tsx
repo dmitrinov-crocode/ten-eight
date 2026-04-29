@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Clipboard from 'expo-clipboard';
 import { colors, fonts, fontSize, spacing, borderRadius, gradients } from '@/constants/theme';
 import GlobeIcon from '@/assets/icons/globe.svg';
+import LockIcon from '@/assets/icons/lock3.svg';
 import ClockIcon from '@/assets/icons/clock.svg';
 import CopyLeftIcon from '@/assets/icons/copy-left.svg';
 import FistIcon from '@/assets/icons/fist-outline.svg';
 import BackIcon from '@/assets/icons/back.svg';
 import UserIcon from '@/assets/icons/user2.svg';
 import FightCard, { FightCardData } from './FightCard';
+import Popup, { PopupMode } from './Popup';
+
+const INVITE_URL = 'https://10-8.gg/i/XK9vMn';
 
 type Props = {
-  onPublicPrivatePress?: () => void;
+  onCopySuccess?: () => void;
+  onExtendPress?: () => void;
 };
 
 const NEXT_FIGHT: FightCardData = {
@@ -60,7 +66,22 @@ function UserRow({ name, fighter, fighterColor, avatarBg }: { name: string; figh
   );
 }
 
-export default function HomeSection({ onPublicPrivatePress }: Props) {
+export default function HomeSection({ onCopySuccess, onExtendPress }: Props) {
+  const [isPublic, setIsPublic] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  const popupMode: PopupMode = isPublic ? 'toPrivate' : 'toPublic';
+
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync(INVITE_URL);
+    onCopySuccess?.();
+  };
+
+  const handlePopupConfirm = () => {
+    setIsPublic((prev) => !prev);
+    setPopupVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -70,15 +91,15 @@ export default function HomeSection({ onPublicPrivatePress }: Props) {
               <Text style={styles.inviteTitle}>Invitation Link</Text>
               <Text style={styles.inviteSubtitle}>Invite friends to play</Text>
             </View>
-            <Pressable style={styles.copyBtn}>
-              <View style={{ transform: [{ rotate: '180deg' }] }}>
+            <Pressable style={styles.copyBtn} onPress={handleCopy}>
+              <View>
                 <CopyLeftIcon width={24} height={24} color={colors.white60} />
               </View>
             </Pressable>
           </View>
           <View style={styles.urlSection}>
             <View style={styles.urlField}>
-              <Text style={styles.urlText} numberOfLines={1}>https://10-8.gg/i/XK9vMn</Text>
+              <Text style={styles.urlText} numberOfLines={1}>{INVITE_URL}</Text>
             </View>
             <Pressable>
               <LinearGradient
@@ -100,14 +121,22 @@ export default function HomeSection({ onPublicPrivatePress }: Props) {
           </View>
         </View>
         <Divider />
-        <Pressable style={styles.publicRow} onPress={onPublicPrivatePress}>
+        <Pressable style={styles.publicRow} onPress={() => setPopupVisible(true)}>
           <View style={styles.publicLeft}>
             <View style={styles.iconWrapper}>
-              <GlobeIcon width={24} height={24} color={colors.white60} />
+              {isPublic ? (
+                <LockIcon width={24} height={24} color={colors.white60} />
+              ) : (
+                <GlobeIcon width={24} height={24} color={colors.white60} />
+              )}
             </View>
             <View style={styles.publicTexts}>
-              <Text style={styles.publicTitle}>Open League to Public</Text>
-              <Text style={styles.publicSubtitle}>Everyone will be able to join</Text>
+              <Text style={styles.publicTitle}>
+                {isPublic ? 'Make the League Private' : 'Open League to Public'}
+              </Text>
+              <Text style={styles.publicSubtitle}>
+                {isPublic ? 'Only invited members can access' : 'Everyone will be able to join'}
+              </Text>
             </View>
           </View>
           <View style={styles.iconWrapper}>
@@ -132,7 +161,7 @@ export default function HomeSection({ onPublicPrivatePress }: Props) {
             </View>
           </View>
         </View>
-        <Pressable style={styles.extendBtn}>
+        <Pressable style={styles.extendBtn} onPress={onExtendPress}>
           <Text style={styles.extendBtnText}>Extend</Text>
         </Pressable>
       </View>
@@ -192,6 +221,13 @@ export default function HomeSection({ onPublicPrivatePress }: Props) {
           </View>
         </View>
       </View>
+
+      <Popup
+        visible={popupVisible}
+        mode={popupMode}
+        onClose={() => setPopupVisible(false)}
+        onConfirm={handlePopupConfirm}
+      />
     </View>
   );
 }
