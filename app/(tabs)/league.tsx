@@ -49,6 +49,7 @@ export default function LeagueScreen() {
         title="NameOftheLeague"
         paddingTop={insets.top + spacing.sm}
         onBackPress={() => router.back()}
+        onEditPress={() => router.push('../fantasy/edit')}
         onSettingsPress={() => router.push('../settings/settings')}
       />
       <ScrollView
