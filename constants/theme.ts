@@ -127,6 +127,9 @@ export const colors = {
   darkBlueBg: '#191C1F',
   darkRedBg: '#1F1919',
   selectedFighterBorder: 'rgba(122, 164, 111, 0.2)',
+  black45: 'rgba(13, 13, 13, 0.45)',
+  teal75: 'rgba(47, 194, 170, 0.75)',
+  red75: 'rgba(195, 67, 99, 0.75)',
 } as const;
 
 export const spacing = {
@@ -161,6 +164,12 @@ export const gradients = {
   cardSelected: {
     colors: ['rgba(0,189,231,0)', 'rgba(63,240,211,0.15)', 'rgba(182,254,13,0.5)'] as const,
     locations: [0.14423, 0.64904, 1.0] as const,
+    start: { x: 0, y: 0 } as const,
+    end: { x: 0, y: 1 } as const,
+  },
+  fighterRed: {
+    colors: ['rgba(231,8,0,0)', 'rgba(231,0,139,0.1)', 'rgba(146,0,231,0.21)'] as const,
+    locations: [0.1875, 0.52404, 0.87981] as const,
     start: { x: 0, y: 0 } as const,
     end: { x: 0, y: 1 } as const,
   },

@@ -1,27 +1,34 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { CommonIcon } from '@/components/auth';
-import { fonts, fontSize, spacing } from '@/constants/theme';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import BackIcon from '@/assets/icons/back.svg';
+import EditContainedIcon from '@/assets/icons/edit-contained.svg';
+import SettingsIcon from '@/assets/icons/settings.svg';
+import { colors, fonts, fontSize, spacing } from '@/constants/theme';
 
 type TProps = {
   title: string;
-  onSearchPress?: () => void;
+  paddingTop?: number;
+  onBackPress?: () => void;
+  onEditPress?: () => void;
   onSettingsPress?: () => void;
+  onSearchPress?: () => void;
 };
 
-export default function Header({ title, onSearchPress, onSettingsPress }: TProps) {
-  const { top } = useSafeAreaInsets();
-
+export default function Header({ title, paddingTop = 0, onBackPress, onEditPress, onSettingsPress }: TProps) {
   return (
-    <View style={[styles.container, { paddingTop: top + spacing.sm }]}>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.rightContainer}>
-        <Pressable onPress={onSearchPress} style={styles.iconButton}>
-          <CommonIcon name="edit" size={32} color="white" />
+    <View style={[styles.container, { paddingTop }]}>
+      <View style={styles.left}>
+        <Pressable style={styles.iconBtn} onPress={onBackPress}>
+          <BackIcon />
         </Pressable>
-        <Pressable onPress={onSettingsPress} style={styles.iconButton}>
-          <CommonIcon name="settings" size={32} color="white" />
+        <Text style={styles.title} numberOfLines={1}>{title}</Text>
+      </View>
+      <View style={styles.right}>
+        <Pressable style={styles.iconBtn} onPress={onEditPress}>
+          <EditContainedIcon width={18} height={18} />
+        </Pressable>
+        <Pressable style={styles.iconBtn} onPress={onSettingsPress}>
+          <SettingsIcon width={24} height={24} />
         </Pressable>
       </View>
     </View>
@@ -33,21 +40,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
     backgroundColor: 'transparent',
   },
-  title: {
-    fontFamily: fonts.semibold,
-    fontSize: fontSize.lg,
-    color: 'rgba(245, 245, 245, 1)',
-  },
-  rightContainer: {
+  left: {
     flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    flex: 1,
   },
-  iconButton: {
-    width: 44,
-    height: 44,
+  iconBtn: {
+    width: 32,
+    height: 32,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: spacing.xs,
+    flexShrink: 0,
+  },
+  title: {
+    fontFamily: fonts.medium,
+    fontSize: fontSize.base,
+    color: colors.white85,
+    flexShrink: 1,
+  },
+  right: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
