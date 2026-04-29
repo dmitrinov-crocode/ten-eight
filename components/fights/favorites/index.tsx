@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { fonts, fontSize } from '@/constants/theme';
-import Card from '@/components/fights/favorites/Card';
 
 const LIST = [
   { id: 1, image: '', name: 'Emma Li', stats: '19-0-0', enemy: 'Emmett' },
@@ -20,9 +19,9 @@ export const Favorites = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.content}
       >
-        {LIST.map((item) => (
-          <Card key={item.id} data={item} />
-        ))}
+        {/*{LIST.map((item) => (*/}
+        {/*  <Card key={item.id} data={item} />*/}
+        {/*))}*/}
       </ScrollView>
     </View>
   );

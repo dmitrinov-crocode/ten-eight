@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ScreenContainer } from '@/components';
 import ProfileHeader from '@/components/profile/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/profile/ProfileStats';
@@ -8,8 +9,17 @@ import ProfileActiveSection from '@/components/profile/profile/ProfileActiveSect
 import ProfileBetsHistorySection from '@/components/profile/profile/ProfileBetsHistorySection';
 import ProfileFantasySection from '@/components/profile/profile/ProfileFantasySection';
 import { spacing } from '@/constants/theme';
+import { WalletPickerModal } from '@/components/wallet/WalletPickerModal';
+import { useActiveAccount } from 'thirdweb/react';
 
 export default function ProfileScreen() {
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const account = useActiveAccount();
+
+  const label = account
+    ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}`
+    : 'Connect Wallet';
+
   const [activeTab, setActiveTab] = useState<ProfileTab>('active');
 
   return (
@@ -27,6 +37,24 @@ export default function ProfileScreen() {
     </ScreenContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  button: {
+    backgroundColor: '#7c3aed',
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  buttonLabel: {
+    color: '#fff',
+    fontFamily: 'Geist_600SemiBold',
+    fontSize: 15,
+  },
+});
 
 const styles = StyleSheet.create({
   content: {
