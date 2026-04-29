@@ -44,32 +44,31 @@ export default function ChooseCardType() {
             </View>
             <View style={styles.cards}>
               <CardTypeOption
-                title="Main Card Only"
-                description="Only the featured fights on the main card will be included in scoring"
+                title="Public"
+                description="Anyone can find this league, view its details, and request to join"
                 Icon={Globe}
-                showPopular
                 isSelected={selected === 'main'}
                 onPress={() => setSelected('main')}
               />
               <CardTypeOption
-                title="Full Card"
-                description="Every fight on the event card will count toward your league"
+                title="Private"
+                description="Only invited members can see this league and access its content"
                 Icon={Lock}
                 isSelected={selected === 'full'}
                 onPress={() => setSelected('full')}
               />
             </View>
-          </View>
-          <View style={styles.buttonWrapper}>
-            {selected ? (
-              <CommonPrimaryButton
-                label="Continue"
-                onPress={() => router.push('/fantasy/league-setup/set-up')}
-                style={styles.button}
-              />
-            ) : (
-              <CommonBlackButton label="Continue" style={styles.button} />
-            )}
+            <View style={styles.buttonWrapper}>
+              {selected ? (
+                <CommonPrimaryButton
+                  label="Continue"
+                  onPress={() => router.push('/fantasy/league-setup/set-up')}
+                  style={styles.button}
+                />
+              ) : (
+                <CommonBlackButton label="Continue" style={styles.button} />
+              )}
+            </View>
           </View>
         </View>
       </LinearGradient>

@@ -54,33 +54,33 @@ export default function ScoringStyle() {
                 onPress={() => setSelected('main')}
               />
               <CardTypeOption
-                title="Full Card"
-                description="Every fight on the event card will count toward your league"
-                tags={['All Fights', 'Complete Scoring']}
+                title="Standard"
+                description="Use a balanced points system based on fight results and performance"
+                tags={['Balanced Points', 'Fair Play']}
                 Icon={CoinHand}
                 isSelected={selected === 'full'}
                 onPress={() => setSelected('full')}
               />
               <CardTypeOption
-                title="Full Card2"
-                description="Every fight on the event card will count toward your league"
-                tags={['All Fights', 'Complete Scoring']}
+                title="Prediction"
+                description="Predict more detailed fight outcomes for a deeper, more advanced format"
+                tags={['Deep Strategy', 'Fair Play']}
                 Icon={Star}
                 isSelected={selected === 'full2'}
                 onPress={() => setSelected('full2')}
               />
             </View>
-          </View>
-          <View style={styles.buttonWrapper}>
-            {selected ? (
-              <CommonPrimaryButton
-                label="Continue"
-                onPress={() => router.push('/fantasy/league-setup/pick-cadence')}
-                style={styles.button}
-              />
-            ) : (
-              <CommonBlackButton label="Continue" style={styles.button} />
-            )}
+            <View style={styles.buttonWrapper}>
+              {selected ? (
+                <CommonPrimaryButton
+                  label="Continue"
+                  onPress={() => router.push('/fantasy/league-setup/pick-cadence')}
+                  style={styles.button}
+                />
+              ) : (
+                <CommonBlackButton label="Continue" style={styles.button} />
+              )}
+            </View>
           </View>
         </View>
       </LinearGradient>
