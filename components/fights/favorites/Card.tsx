@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   image: {
     width: 60,
     height: 60,
-    // borderRadius: '50%',
+    // borderRadius: 1000,
     marginBottom: 20,
     backgroundColor: 'white',
   },

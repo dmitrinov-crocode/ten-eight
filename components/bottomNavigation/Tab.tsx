@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Pressable, Text } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { CommonIcon } from '@/components/common';
+import { CommonIcon } from '@/components/auth';
 import { IconName } from '@/components/common/CommonIcon';
 import { fonts, fontSize } from '@/constants/theme';
 

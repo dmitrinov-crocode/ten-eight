@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { CommonIcon } from '@/components/common';
+import { CommonIcon } from '@/components/auth';
 import { fonts, fontSize, spacing } from '@/constants/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

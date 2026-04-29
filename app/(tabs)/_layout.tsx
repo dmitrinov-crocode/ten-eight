@@ -5,10 +5,12 @@ import Navigation from '@/components/bottomNavigation/Navigation';
 
 const TABS: TTab[] = [
   { name: 'index', route: 'index', icon: 'fist-outline', label: 'Fights' },
+  { name: 'all-leagues', route: 'all-leagues', icon: 'fist-outline', label: 'Fights2' },
   { name: 'ranks', route: 'ranks', icon: 'cup', label: 'Pros' },
-  { name: 'picks', route: 'picks', icon: 'coin', label: 'Feed' },
+  { name: 'picks', route: 'picks', icon: 'list', label: 'Feed' },
   { name: 'groups', route: 'groups', icon: 'group', label: 'Fantasy' },
-  { name: 'profile', route: 'profile', icon: 'profile', label: 'Account' },
+  { name: 'league', route: 'league', icon: 'group', label: 'Fantasy2' },
+  { name: 'profile', route: 'profile', icon: 'user', label: 'Account' },
 ];
 
 export default function TabsLayout() {

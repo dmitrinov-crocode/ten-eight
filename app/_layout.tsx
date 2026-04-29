@@ -43,6 +43,7 @@ export default function RootLayout() {
           contentFit="fill"
         >
           <Stack
+            initialRouteName="auth/get-started"
             screenOptions={{
               headerStyle: {
                 backgroundColor: 'transparent',
@@ -51,6 +52,7 @@ export default function RootLayout() {
               headerShadowVisible: false,
             }}
           >
+            <Stack.Screen name="auth/get-started" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="fight/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
           </Stack>
