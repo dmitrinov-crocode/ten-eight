@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   Dimensions,
-  Image,
   Modal,
   Pressable,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
@@ -67,6 +69,12 @@ type Fighter = {
   multiplier: string;
 };
 
+/** Token IDs from Polymarket for each fighter's win outcome */
+export interface PolyTokenIds {
+  fighter1: string;
+  fighter2: string;
+}
+
 type Props = {
   visible: boolean;
   onClose: () => void;
@@ -77,7 +85,14 @@ type Props = {
   date: string;
   time: string;
   isVerified?: boolean;
-  onSubmit?: () => void;
+  /** Called when the user confirms the bet. Return value is the Polymarket order ID. */
+  onSubmit?: (amount: number, fighter: 'fighter1' | 'fighter2') => Promise<void>;
+  /** Polymarket outcome token IDs — if provided, enables real on-chain betting */
+  polyTokenIds?: PolyTokenIds;
+  /** USDC balance of the connected wallet (pass from usePolymarketBet) */
+  usdcBalance?: number;
+  /** True while the parent is processing the bet */
+  betLoading?: boolean;
 };
 
 const TeamsEntryModal = ({
@@ -91,6 +106,9 @@ const TeamsEntryModal = ({
   time,
   isVerified = true,
   onSubmit,
+  polyTokenIds,
+  usdcBalance,
+  betLoading = false,
 }: Props) => {
   const insets = useSafeAreaInsets();
 
@@ -197,9 +215,11 @@ const TeamsEntryModal = ({
     setEntryAmount(String((current + amount).toFixed(2)));
   };
 
+  const selectedFighterData = currentFighter === 'fighter1' ? fighter1 : fighter2;
+  const multiplier = parseFloat(selectedFighterData.multiplier) || 0;
   const potentialPayout =
-    entryAmount && parseFloat(entryAmount) > 0
-      ? `$${(parseFloat(entryAmount) * 1.89).toFixed(2)}`
+    entryAmount && parseFloat(entryAmount) > 0 && multiplier > 0
+      ? `$${(parseFloat(entryAmount) * multiplier).toFixed(2)}`
       : '$0.00';
 
   return (
@@ -257,7 +277,9 @@ const TeamsEntryModal = ({
                 <View style={styles.section}>
                   <View style={styles.row}>
                     <Text style={styles.label}>Entry Amount</Text>
-                    <Text style={styles.balance}>balance: $0.00</Text>
+                    <Text style={styles.balance}>
+                      balance: ${usdcBalance != null ? usdcBalance.toFixed(2) : '—'}
+                    </Text>
                   </View>
                   <View style={styles.inputRow}>
                     <Pressable
@@ -323,8 +345,29 @@ const TeamsEntryModal = ({
                 <View style={styles.submitWrapper}>
                   {isVerified ? (
                     <Pressable
-                      onPress={onSubmit}
-                      style={({ pressed }) => [{ opacity: pressed ? 0.85 : 1 }]}
+                      disabled={betLoading}
+                      onPress={async () => {
+                        const amount = parseFloat(entryAmount);
+                        if (!amount || amount <= 0) {
+                          Alert.alert('Enter amount', 'Please enter a valid bet amount.');
+                          return;
+                        }
+                        if (usdcBalance != null && amount > usdcBalance) {
+                          Alert.alert('Insufficient balance', 'Your USDC balance is too low.');
+                          return;
+                        }
+                        try {
+                          await onSubmit?.(amount, currentFighter);
+                          Alert.alert(
+                            'Bet placed!',
+                            `$${amount.toFixed(2)} on ${currentFighter === 'fighter1' ? fighter1.name : fighter2.name}`,
+                          );
+                          dismiss();
+                        } catch (e: any) {
+                          Alert.alert('Error', e?.message ?? 'Failed to place bet');
+                        }
+                      }}
+                      style={({ pressed }) => [{ opacity: pressed || betLoading ? 0.7 : 1 }]}
                     >
                       <LinearGradient
                         colors={['#CBFF00', '#07F499']}
@@ -332,7 +375,13 @@ const TeamsEntryModal = ({
                         end={{ x: 1, y: 0 }}
                         style={styles.submitVerifiedGradient}
                       >
-                        <Text style={styles.submitVerifiedText}>Place a Bet</Text>
+                        {betLoading ? (
+                          <ActivityIndicator color="rgba(13,13,13,0.85)" />
+                        ) : (
+                          <Text style={styles.submitVerifiedText}>
+                            {polyTokenIds ? 'Place Bet on Polymarket' : 'Place a Bet'}
+                          </Text>
+                        )}
                       </LinearGradient>
                     </Pressable>
                   ) : (

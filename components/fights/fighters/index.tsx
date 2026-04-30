@@ -19,17 +19,17 @@ export default function Fighters() {
           isOpen={activeAccordion === 'Main Card'}
           onPress={() => handlePress('Main Card')}
         />
-        <Accordion
-          title="Prelims"
-          isOpen={activeAccordion === 'Prelims'}
-          onPress={() => handlePress('Prelims')}
-        />
-        <Accordion
-          title="Early Prelims"
-          isOpen={activeAccordion === 'Early Prelims'}
-          onPress={() => handlePress('Early Prelims')}
-          isLast
-        />
+        {/*<Accordion*/}
+        {/*  title="Prelims"*/}
+        {/*  isOpen={activeAccordion === 'Prelims'}*/}
+        {/*  onPress={() => handlePress('Prelims')}*/}
+        {/*/>*/}
+        {/*<Accordion*/}
+        {/*  title="Early Prelims"*/}
+        {/*  isOpen={activeAccordion === 'Early Prelims'}*/}
+        {/*  onPress={() => handlePress('Early Prelims')}*/}
+        {/*  isLast*/}
+        {/*/>*/}
       </View>
     </View>
   );

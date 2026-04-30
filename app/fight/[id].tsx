@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Image,
+  ActivityIndicator,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,7 +18,9 @@ import Svg, { Defs, Line, LinearGradient as SvgGradient, Path, Stop } from 'reac
 
 import { CommonIcon } from '@/components/common';
 import { fonts, fontSize } from '@/constants/theme';
-import TeamsEntryModal from '@/components/fights/fighters/TeamsEntryModal'; // ─── Types ───────────────────────────────────────────────────────────────────
+import TeamsEntryModal, { PolyTokenIds } from '@/components/fights/fighters/TeamsEntryModal';
+import { usePolymarketBet } from '@/hooks/usePolymarketBet';
+import { useFightDetails } from '@/hooks/useFightDetails';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -824,10 +827,7 @@ function CommentsPanel() {
     <View style={[cpStyles.panel, { paddingBottom }]}>
       {/* Transparent backdrop to close menu on outside tap */}
       {openMenuId !== null && (
-        <Pressable
-          style={StyleSheet.absoluteFillObject}
-          onPress={() => setOpenMenuId(null)}
-        />
+        <Pressable style={StyleSheet.absoluteFillObject} onPress={() => setOpenMenuId(null)} />
       )}
 
       {/* Header */}
@@ -975,14 +975,20 @@ const cpStyles = StyleSheet.create({
 export default function FightDetailsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { placeBet, getUsdcBalance, loading: betLoading, isConnected } = usePolymarketBet();
+  const [usdcBalance, setUsdcBalance] = useState<number | undefined>(undefined);
 
   const params = useLocalSearchParams<{
+    id: string;
     date: string;
     time: string;
     prize: string;
     eventName: string;
+    weightClass: string;
+    cardPosition: string;
     fighter1: string;
     fighter2: string;
+    polyTokenIds?: string;
   }>();
 
   const fighter1: Fighter = params.fighter1
@@ -1003,12 +1009,30 @@ export default function FightDetailsScreen() {
         multiplier: '1.89x',
       };
 
-  const date = params.date ?? 'Sat 4/12';
-  const time = params.time ?? '13:00';
-  const eventName = params.eventName ?? 'UFC Event1';
+  const date = params.date ?? 'TBD';
+  const time = params.time ?? '';
+  const eventName = params.eventName ?? 'UFC';
+  const weightClass = params.weightClass ?? '';
+  const cardPosition = params.cardPosition ?? '';
+
+  const polyTokenIds: PolyTokenIds | undefined = params.polyTokenIds
+    ? JSON.parse(params.polyTokenIds)
+    : undefined;
+
+  const { fighter1Stats, fighter2Stats, fightInfo, syncing } = useFightDetails(
+    params.id ?? '',
+    fighter1.name,
+    fighter2.name,
+  );
+
+  console.log('fighter1Stats', fighter1Stats);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFighter, setSelectedFighter] = useState<'fighter1' | 'fighter2'>('fighter1');
+  const [placedBet, setPlacedBet] = useState<{
+    fighter: 'fighter1' | 'fighter2';
+    amount: number;
+  } | null>(null);
   const [detailedOpen, setDetailedOpen] = useState(false);
   const [oddsOpen, setOddsOpen] = useState(false);
   const [communityOpen, setCommunityOpen] = useState(false);
@@ -1017,11 +1041,21 @@ export default function FightDetailsScreen() {
   const openModal = (fighter: 'fighter1' | 'fighter2') => {
     setSelectedFighter(fighter);
     setModalVisible(true);
+    // Refresh USDC balance when modal opens
+    if (isConnected) {
+      getUsdcBalance().then(setUsdcBalance);
+    }
+  };
+
+  const handlePlaceBet = async (amount: number, fighter: 'fighter1' | 'fighter2') => {
+    if (!polyTokenIds) return;
+    const tokenId = fighter === 'fighter1' ? polyTokenIds.fighter1 : polyTokenIds.fighter2;
+    await placeBet({ tokenId, usdcAmount: amount });
+    setPlacedBet({ fighter, amount });
   };
 
   return (
     <View style={styles.root}>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
@@ -1029,6 +1063,13 @@ export default function FightDetailsScreen() {
           { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 160 },
         ]}
       >
+        {syncing && (
+          <View style={styles.syncBanner}>
+            <ActivityIndicator size="small" color="rgba(245,245,245,0.4)" />
+            <Text style={styles.syncText}>Loading fighter stats…</Text>
+          </View>
+        )}
+
         {/* Nav bar */}
         <View style={styles.navBar}>
           <Pressable onPress={() => router.back()} style={styles.navBtn} hitSlop={8}>
@@ -1045,9 +1086,12 @@ export default function FightDetailsScreen() {
           <View style={styles.eventRow}>
             <View style={styles.eventLeft}>
               <Text style={styles.eventName}>{eventName}</Text>
-              <Text style={styles.eventRounds}>3 Rounds</Text>
+              {cardPosition ? <Text style={styles.eventRounds}>{cardPosition}</Text> : null}
+              {fightInfo?.rounds ? (
+                <Text style={styles.eventRounds}>{fightInfo.rounds} Rounds</Text>
+              ) : null}
             </View>
-            <Text style={styles.eventWeight}>Lightweight</Text>
+            {weightClass ? <Text style={styles.eventWeight}>{weightClass}</Text> : null}
           </View>
 
           {/* Fighter images */}
@@ -1056,7 +1100,7 @@ export default function FightDetailsScreen() {
               <Image
                 source={{ uri: fighter1.image }}
                 style={StyleSheet.absoluteFill}
-                resizeMode="cover"
+                contentFit="cover"
               />
               <LinearGradient
                 colors={['rgba(0,189,231,0)', 'rgba(63,240,211,0.072)', 'rgba(182,254,13,0.25)']}
@@ -1065,11 +1109,14 @@ export default function FightDetailsScreen() {
               />
               <View style={[styles.fighterCardBorder, { borderColor: '#2FC2AA' }]} />
             </Pressable>
-            <Pressable style={[styles.fighterImageCard, { backgroundColor: '#1F1919' }]} onPress={() => openModal('fighter2')}>
+            <Pressable
+              style={[styles.fighterImageCard, { backgroundColor: '#1F1919' }]}
+              onPress={() => openModal('fighter2')}
+            >
               <Image
                 source={{ uri: fighter2.image }}
                 style={StyleSheet.absoluteFill}
-                resizeMode="cover"
+                contentFit="cover"
               />
               <LinearGradient
                 colors={['rgba(231,8,0,0)', 'rgba(231,0,139,0.05)', 'rgba(146,0,231,0.105)']}
@@ -1084,9 +1131,13 @@ export default function FightDetailsScreen() {
           <View style={styles.fighterInfoRow}>
             <View style={styles.fighterInfoLeft}>
               <Text style={styles.fighterName}>{fighter1.name}</Text>
+              {fighter1Stats?.nickname ? (
+                <Text style={styles.fighterNickname}>"{fighter1Stats.nickname}"</Text>
+              ) : null}
               <View style={styles.fighterRecordRow}>
-                <Text style={styles.fighterRecordText}>15-2-1</Text>
-                <Text style={styles.fighterRecordText}>+234</Text>
+                {fighter1Stats?.record ? (
+                  <Text style={styles.fighterRecordText}>{fighter1Stats.record}</Text>
+                ) : null}
               </View>
               <View style={styles.fighterOddsRow}>
                 <Text style={[styles.fighterOddsText, { color: '#2FC2AA' }]}>{fighter1.odds}</Text>
@@ -1103,9 +1154,15 @@ export default function FightDetailsScreen() {
             </View>
             <View style={styles.fighterInfoRight}>
               <Text style={[styles.fighterName, styles.textRight]}>{fighter2.name}</Text>
+              {fighter2Stats?.nickname ? (
+                <Text style={[styles.fighterNickname, styles.textRight]}>
+                  "{fighter2Stats.nickname}"
+                </Text>
+              ) : null}
               <View style={[styles.fighterRecordRow, styles.rowEnd]}>
-                <Text style={styles.fighterRecordText}>15-2-1</Text>
-                <Text style={styles.fighterRecordText}>-234</Text>
+                {fighter2Stats?.record ? (
+                  <Text style={styles.fighterRecordText}>{fighter2Stats.record}</Text>
+                ) : null}
               </View>
               <View style={[styles.fighterOddsRow, styles.rowEnd]}>
                 <Text style={[styles.fighterOddsText, { color: '#C34363' }]}>{fighter2.odds}</Text>
@@ -1121,29 +1178,38 @@ export default function FightDetailsScreen() {
           <View style={styles.statsRow}>
             <StatCard
               stats={[
-                { label: 'Age', value: '5.7' },
-                { label: 'Height', value: '5\'10"' },
-                { label: 'Stance', value: 'Orthodox' },
-                { label: 'Avg. Fight Time', value: '12:50' },
+                { label: 'Age', value: fighter1Stats?.age ? String(fighter1Stats.age) : '—' },
+                { label: 'Height', value: fighter1Stats?.height ?? '—' },
+                { label: 'Reach', value: fighter1Stats?.reach ?? '—' },
+                { label: 'Stance', value: fighter1Stats?.stance ?? '—' },
               ]}
             />
             <StatCard
               stats={[
-                { label: 'Age', value: '5.7' },
-                { label: 'Height', value: '6\'0"' },
-                { label: 'Stance', value: 'Orthodox' },
-                { label: 'Avg. Fight Time', value: '12:50' },
+                { label: 'Age', value: fighter2Stats?.age ? String(fighter2Stats.age) : '—' },
+                { label: 'Height', value: fighter2Stats?.height ?? '—' },
+                { label: 'Reach', value: fighter2Stats?.reach ?? '—' },
+                { label: 'Stance', value: fighter2Stats?.stance ?? '—' },
               ]}
             />
           </View>
 
-          {/* Place a Bet (secondary) */}
-          <Pressable
-            style={({ pressed }) => [styles.placeBetBtn, { opacity: pressed ? 0.7 : 1 }]}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text style={styles.placeBetText}>Place a Bet</Text>
-          </Pressable>
+          {placedBet ? (
+            <View style={styles.betBanner}>
+              <View style={styles.betDot} />
+              <Text style={styles.betBannerText}>
+                Bet placed: ${placedBet.amount.toFixed(2)} on{' '}
+                {placedBet.fighter === 'fighter1' ? fighter1.name : fighter2.name}
+              </Text>
+            </View>
+          ) : (
+            <Pressable
+              style={({ pressed }) => [styles.placeBetBtn, { opacity: pressed ? 0.7 : 1 }]}
+              onPress={() => setModalVisible(true)}
+            >
+              <Text style={styles.placeBetText}>Place a Bet</Text>
+            </Pressable>
+          )}
 
           {/* Accordions */}
           <View style={styles.accordions}>
@@ -1153,46 +1219,76 @@ export default function FightDetailsScreen() {
               onPress={() => setDetailedOpen((v) => !v)}
             >
               <View style={styles.detailedCard}>
-                <StatBar
-                  label="Strikes / Min"
-                  f1Value="5.98"
-                  f2Value="3.24"
-                  f1Pct={65}
-                  f2Pct={35}
-                  dual
-                />
-                <StatBar
-                  label="Strike Accuracy"
-                  f1Value="50%"
-                  f2Value="48%"
-                  f1Pct={51}
-                  f2Pct={49}
-                  dual
-                />
-                <StatBar
-                  label="Takedowns / Fight"
-                  f1Value="0.00"
-                  f2Value="5.48"
-                  f1Pct={0}
-                  f2Pct={90}
-                  dual={false}
-                />
-                <StatBar
-                  label="Takedown Accuracy"
-                  f1Value="0%"
-                  f2Value="45%"
-                  f1Pct={0}
-                  f2Pct={48}
-                  dual={false}
-                />
-                <StatBar
-                  label="Subs / Fight"
-                  f1Value="0.0"
-                  f2Value="0.6"
-                  f1Pct={0}
-                  f2Pct={29}
-                  dual={false}
-                />
+                {(() => {
+                  const s1spm = fighter1Stats?.strikes_landed_per_min ?? 0;
+                  const s2spm = fighter2Stats?.strikes_landed_per_min ?? 0;
+                  const spmTotal = s1spm + s2spm || 1;
+
+                  const s1acc = fighter1Stats?.strike_accuracy ?? 0;
+                  const s2acc = fighter2Stats?.strike_accuracy ?? 0;
+                  const accTotal = s1acc + s2acc || 1;
+
+                  const s1td = fighter1Stats?.takedown_avg ?? 0;
+                  const s2td = fighter2Stats?.takedown_avg ?? 0;
+                  const tdTotal = s1td + s2td || 1;
+
+                  const s1sub = fighter1Stats?.submission_avg ?? 0;
+                  const s2sub = fighter2Stats?.submission_avg ?? 0;
+                  const subTotal = s1sub + s2sub || 1;
+
+                  return (
+                    <>
+                      <StatBar
+                        label="Strikes / Min"
+                        f1Value={s1spm ? s1spm.toFixed(2) : '—'}
+                        f2Value={s2spm ? s2spm.toFixed(2) : '—'}
+                        f1Pct={Math.round((s1spm / spmTotal) * 100)}
+                        f2Pct={Math.round((s2spm / spmTotal) * 100)}
+                        dual
+                      />
+                      <StatBar
+                        label="Strike Accuracy"
+                        f1Value={s1acc ? `${s1acc}%` : '—'}
+                        f2Value={s2acc ? `${s2acc}%` : '—'}
+                        f1Pct={Math.round((s1acc / accTotal) * 100)}
+                        f2Pct={Math.round((s2acc / accTotal) * 100)}
+                        dual
+                      />
+                      <StatBar
+                        label="Takedowns / Fight"
+                        f1Value={s1td ? s1td.toFixed(2) : '—'}
+                        f2Value={s2td ? s2td.toFixed(2) : '—'}
+                        f1Pct={Math.round((s1td / tdTotal) * 100)}
+                        f2Pct={Math.round((s2td / tdTotal) * 100)}
+                        dual
+                      />
+                      <StatBar
+                        label="Takedown Accuracy"
+                        f1Value={
+                          fighter1Stats?.takedown_accuracy
+                            ? `${fighter1Stats.takedown_accuracy}%`
+                            : '—'
+                        }
+                        f2Value={
+                          fighter2Stats?.takedown_accuracy
+                            ? `${fighter2Stats.takedown_accuracy}%`
+                            : '—'
+                        }
+                        f1Pct={fighter1Stats?.takedown_accuracy ?? 0}
+                        f2Pct={fighter2Stats?.takedown_accuracy ?? 0}
+                        dual
+                      />
+                      <StatBar
+                        label="Subs / Fight"
+                        f1Value={s1sub ? s1sub.toFixed(1) : '—'}
+                        f2Value={s2sub ? s2sub.toFixed(1) : '—'}
+                        f1Pct={Math.round((s1sub / subTotal) * 100)}
+                        f2Pct={Math.round((s2sub / subTotal) * 100)}
+                        dual
+                      />
+                    </>
+                  );
+                })()}
               </View>
             </SectionAccordion>
 
@@ -1227,6 +1323,10 @@ export default function FightDetailsScreen() {
         date={date}
         time={time}
         eventName={eventName}
+        polyTokenIds={polyTokenIds}
+        usdcBalance={usdcBalance}
+        betLoading={betLoading}
+        onSubmit={polyTokenIds ? handlePlaceBet : undefined}
       />
     </View>
   );
@@ -1236,7 +1336,19 @@ export default function FightDetailsScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-
+  syncBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: 'rgba(245,245,245,0.04)',
+  },
+  syncText: {
+    fontFamily: fonts.regular,
+    fontSize: fontSize.xs,
+    color: 'rgba(245,245,245,0.4)',
+  },
 
   scrollContent: { flexGrow: 1 },
 
@@ -1290,6 +1402,12 @@ const styles = StyleSheet.create({
     color: 'rgba(245,245,245,0.85)',
     lineHeight: 18,
   },
+  fighterNickname: {
+    fontFamily: fonts.regular,
+    fontSize: fontSize.xs,
+    color: 'rgba(245,245,245,0.4)',
+    fontStyle: 'italic',
+  },
   textRight: { textAlign: 'right' },
   fighterRecordRow: { flexDirection: 'row', gap: 10 },
   rowEnd: { justifyContent: 'flex-end' },
@@ -1340,6 +1458,28 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontSize: fontSize.sm,
     color: 'rgba(245,245,245,0.85)',
+  },
+  betBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(7, 244, 153, 0.25)',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: 'rgba(7, 244, 153, 0.07)',
+  },
+  betDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#07F499',
+  },
+  betBannerText: {
+    fontFamily: fonts.regular,
+    fontSize: fontSize.sm,
+    color: '#07F499',
   },
 
   // Accordions

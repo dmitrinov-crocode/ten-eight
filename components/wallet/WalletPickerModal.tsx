@@ -28,7 +28,6 @@ export function WalletPickerModal({ visible, onClose }: Props) {
   const account = useActiveAccount();
   const wallet = useActiveWallet();
   const { disconnect } = useDisconnect();
-
   const [screen, setScreen] = useState<Screen>('menu');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -55,7 +54,7 @@ export function WalletPickerModal({ visible, onClose }: Props) {
       });
       setScreen('otp');
     } catch (e: any) {
-      setError(e?.message ?? 'Ошибка отправки кода');
+      setError(e?.message ?? 'Error sending the code');
     } finally {
       setLoading(false);
     }
@@ -78,7 +77,7 @@ export function WalletPickerModal({ visible, onClose }: Props) {
       });
       handleClose();
     } catch (e: any) {
-      setError(e?.message ?? 'Неверный код');
+      setError(e?.message ?? 'Invalid code');
     } finally {
       setLoading(false);
     }
@@ -87,11 +86,8 @@ export function WalletPickerModal({ visible, onClose }: Props) {
   // @ts-ignore
   async function handleExternalWallet(walletId) {
     setError('');
-    setLoading(true);
 
     try {
-      // 1. проверяем доступность приложения
-
       let scheme = '';
 
       if (walletId === 'io.metamask') {
@@ -108,13 +104,14 @@ export function WalletPickerModal({ visible, onClose }: Props) {
         throw new Error('WALLET_NOT_INSTALLED');
       }
 
-      // 2. если ок → подключаемся
       const w = createWallet(walletId);
 
       await connect(async () => {
         await w.connect({ client: thirdwebClient });
         return w;
       });
+
+      console.log({ w });
 
       handleClose();
     } catch (e) {
@@ -127,10 +124,10 @@ export function WalletPickerModal({ visible, onClose }: Props) {
             ? 'https://www.coinbase.com/wallet'
             : 'https://walletconnect.com/';
 
-      Alert.alert('Кошелёк не установлен', 'Установи приложение или используй email вход', [
-        { text: 'Отмена', style: 'cancel' },
+      Alert.alert('Wallet not installed', 'Install the app or sign in with your email', [
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Установить',
+          text: 'Download',
           onPress: () => Linking.openURL(storeUrl),
         },
       ]);
@@ -149,20 +146,19 @@ export function WalletPickerModal({ visible, onClose }: Props) {
       <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={handleClose} />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <View style={styles.sheet}>
-          {/* Connected */}
           {account ? (
             <>
-              <Text style={styles.title}>Кошелёк подключён</Text>
+              <Text style={styles.title}>Wallet connected</Text>
               <Text style={styles.address}>
                 {account.address.slice(0, 8)}...{account.address.slice(-6)}
               </Text>
               <TouchableOpacity style={[styles.btn, styles.btnRed]} onPress={handleDisconnect}>
-                <Text style={styles.btnRedLabel}>Отключить</Text>
+                <Text style={styles.btnRedLabel}>Disable</Text>
               </TouchableOpacity>
             </>
           ) : screen === 'menu' ? (
             <>
-              <Text style={styles.title}>Подключить кошелёк</Text>
+              <Text style={styles.title}>Connect wallet</Text>
 
               {/* Email (works on simulator) */}
               <TouchableOpacity style={styles.btn} onPress={() => setScreen('email')}>
@@ -171,7 +167,7 @@ export function WalletPickerModal({ visible, onClose }: Props) {
 
               <View style={styles.dividerRow}>
                 <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>или</Text>
+                <Text style={styles.dividerText}>or</Text>
                 <View style={styles.dividerLine} />
               </View>
 
@@ -208,9 +204,9 @@ export function WalletPickerModal({ visible, onClose }: Props) {
                   setError('');
                 }}
               >
-                <Text style={styles.back}>← Назад</Text>
+                <Text style={styles.back}>← Back</Text>
               </TouchableOpacity>
-              <Text style={styles.title}>Введи email</Text>
+              <Text style={styles.title}>Enter email</Text>
               <TextInput
                 style={styles.input}
                 placeholder="you@example.com"
@@ -229,7 +225,7 @@ export function WalletPickerModal({ visible, onClose }: Props) {
                 {loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={styles.btnLabel}>Отправить код</Text>
+                  <Text style={styles.btnLabel}>Send code</Text>
                 )}
               </TouchableOpacity>
             </>
@@ -242,10 +238,10 @@ export function WalletPickerModal({ visible, onClose }: Props) {
                   setOtp('');
                 }}
               >
-                <Text style={styles.back}>← Назад</Text>
+                <Text style={styles.back}>← Back</Text>
               </TouchableOpacity>
-              <Text style={styles.title}>Введи код из письма</Text>
-              <Text style={styles.subtitle}>Код отправлен на {email}</Text>
+              <Text style={styles.title}>Enter the code from the email</Text>
+              <Text style={styles.subtitle}>The code has been sent to {email}</Text>
               <TextInput
                 style={[styles.input, styles.inputOtp]}
                 placeholder="123456"
@@ -264,7 +260,7 @@ export function WalletPickerModal({ visible, onClose }: Props) {
                 {loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={styles.btnLabel}>Войти</Text>
+                  <Text style={styles.btnLabel}>Sign in</Text>
                 )}
               </TouchableOpacity>
             </>
